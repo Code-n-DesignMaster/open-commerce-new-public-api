@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PaymentGraphqlClientService paymentWalletDelete should match snapshot: for operation 1`] = `
+"mutation paymentWalletDelete($customerId: ID!) {
+ paymentWalletDelete(customerId: $customerId)
+}"
+`;
+
+exports[`PaymentGraphqlClientService paymentWalletDelete should match snapshot: for parameters 1`] = `
+Object {
+  "customerId": "testCustomerId",
+}
+`;

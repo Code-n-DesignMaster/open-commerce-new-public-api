@@ -1,0 +1,81 @@
+extend type Mutation {
+  # Complete the final step of the customer registration process
+  customerRegistrationComplete(
+    # The required details to complete a started registration
+    input: CustomerRegistrationComplete!
+  ): Customer
+}
+
+# Attributes to be set when completing final step of new customer registration
+input CustomerRegistrationComplete {
+  # Which UUIDs of agreements to accept
+  acceptAgreement: [ID]
+
+  # Customer's email address
+  email: OCEmailAddress
+
+  # Customer's name
+  name: CustomerPersonNameCreate
+
+  # Demographics details (ie. birthday, gender)
+  demographics: CustomerDemographicsCreate
+
+  # Customer preferences (ie. email_newsletter)
+  preferences: [CustomerPreferenceCreate]
+
+  # The customer's default store
+  defaultLocationId: Int!
+}
+
+# A customer's preference (ie. receive email newsletter)
+input CustomerPreferenceCreate {
+  # ID of the brand defined customer preference
+  uuid: ID!
+
+  # Value of the preference (ie. true, 5, Some String)
+  value: PreferenceValueCreate
+}
+
+# The various data types allowable for a user preference
+input PreferenceValueCreate {
+  # boolean data type
+  booleanType: Boolean
+
+  # string data type
+  stringType: String
+
+  # integer data type
+  intType: Int
+
+  # float data type
+  floatType: Float
+}
+
+# Demographics data about a person/customer
+input CustomerDemographicsCreate {
+  # Birthday (ie. 1/1/1969)
+  birthday: OCDate
+
+  # Gender (ie. female)
+  gender: String
+
+  # Zip Code
+  zipCode: String
+
+  # Custom demographic attributes
+  customDemographics: OCJSON
+}
+
+# Input object for adding/editing a person's name
+input CustomerPersonNameCreate {
+  # Title (ie. Mr, Ms, Mrs, Dr)
+  title: String
+  # First name
+  first: String
+  # Middle name
+  middle: String
+  # Last name
+  last: String
+  # Suffix (ie. Jr, Sr, VII)
+  suffix: String
+}

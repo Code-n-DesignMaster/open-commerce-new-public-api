@@ -1,0 +1,18 @@
+type Query {
+  dummy: Int
+}
+
+type Mutation {
+  dummy: Int
+}
+
+# An object with an ID
+interface Node {
+  # ID of the object
+  id: ID!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

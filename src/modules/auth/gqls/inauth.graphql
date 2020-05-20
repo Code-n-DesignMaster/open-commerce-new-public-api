@@ -1,0 +1,37 @@
+extend type Mutation {
+  inauthDeviceTrustScoreThresholdUpdate(
+    input: InauthTrustScoreValueInput!
+  ): Boolean! @adminOnly
+
+  inAuthMobileDeviceRegister(
+    input: InAuthDeviceRegistrationRequestInput!
+  ): InAuthDeviceRegistrationResponse
+  inauthDeviceBlacklistRemove(deviceId: ID!): Boolean! @adminOnly
+  inauthBlacklistedDeviceUnblockedStatusSet(
+    deviceId: ID!
+    unblockedStatus: Boolean!
+  ): Boolean! @adminOnly
+}
+
+extend type Query {
+  inAuthGetSigfiles: InAuthGetSigfilesResponse
+}
+
+input InAuthDeviceRegistrationRequestInput {
+  payload: String!
+}
+
+input InauthTrustScoreValueInput {
+  value: Int!
+}
+
+type InAuthGetSigfilesResponse {
+  rawMessage: String!
+  sigFilesLogConfigVersion: String!
+  sigFilesMalwareVersion: String!
+  sigFilesRootVersion: String!
+}
+
+type InAuthDeviceRegistrationResponse {
+  deviceResponse: String!
+}

@@ -1,0 +1,11 @@
+# All API Queries
+extend type Query {
+  # Returns the currently logged in customer
+  loggedInTest: LoggedInTest
+}
+
+# Customer information
+type LoggedInTest {
+  # A unique to the tenant username
+  result: Boolean!
+}

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Health Check (e2e) /health-check (GET) 1`] = `
+Object {
+  "info": Object {},
+  "status": "ok",
+}
+`;

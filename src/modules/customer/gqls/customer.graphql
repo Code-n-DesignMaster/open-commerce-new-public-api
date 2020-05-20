@@ -1,0 +1,2565 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+# `Date` custom scalar type
+scalar OCDate
+
+# `DateTime` custom scalar type
+scalar OCDateTime
+
+# `JSON` custom scalar type
+scalar OCJSON
+
+# `OCPhoneNumber` custom scalar type
+scalar OCPhoneNumber
+
+# `EmailAddress` custom scalar type
+scalar OCEmailAddress
+
+# `OCURL` custom scalar type
+scalar OCURL
+
+enum TRANSACTION_PURCHASE_TYPE {
+  # A powercard purchase
+  POWERCARD
+
+  # A pay at table purchase
+  PAY_AT_TABLE
+}
+
+# Inputs for getting an updated token
+input AccessTokenByRefreshTokenInput {
+  # Access Token
+  accessToken: String!
+
+  # Refresh Token
+  refreshToken: String!
+}
+
+# A OTP Object
+input OTP {
+  # Session generated for OTP
+  session: String!
+
+  # OTP value
+  otp: String!
+}
+
+# Filter for selecting by brand details
+input BrandFilter {
+  # Portion or all of a brand's name
+  nameContains: String
+
+  # Exact match only
+  nameEquals: String
+
+  # Portion or all of a tenants name
+  tenantContains: String
+
+  # Exact match only
+  tenantEquals: String
+}
+
+# A new geolocation coordinate
+input GeoLocationCreate {
+  # Latitude
+  latitude: Float!
+
+  # Longitude
+  longitude: Float!
+}
+
+# An updated geolocation coordinate
+input GeoLocationUpdate {
+  # Latitude
+  latitude: Float!
+
+  # Longitude
+  longitude: Float!
+}
+
+# Filter by a geo location coordinate
+input GeoLocationFilter {
+  # The epicenter coordinate to use for filter
+  epicenter: GeoLocationCreate!
+
+  # Radius around epicenter to include in filter
+  radius: Float!
+}
+
+# A unique node in the database
+interface Node {
+  # Universally unique identifier of the node
+  uuid: ID!
+}
+
+# Data to be sent to mobile app when booting up
+# Base PageInfo object to handle pagination
+type PageInfo {
+  # Does this data contain another page
+  hasNextPage: Boolean!
+
+  # Does this data contain a previous page
+  hasPreviousPage: Boolean!
+
+  # Where does this data start
+  startCursor: String
+
+  # Where does this data end
+  endCursor: String
+}
+
+# Authentication payload of tokens and user details
+type AuthPayload {
+  # Auth and Refresh tokens
+  tokens: Tokens
+
+  # Customer details for user signing in
+  customer: Customer
+}
+
+# Tokens used for authentication
+type Tokens {
+  # The token to be used with each request
+  accessToken: String!
+
+  # A secondary token to be only used when getting a refreshed token
+  refreshToken: String!
+}
+
+# A client token for authorizing payment on a transaction
+type ClientToken {
+  # The token
+  token: String
+}
+
+# A phone number to be potentially contacted on
+type ContactPhoneNumber {
+  # Name of the number (ie. Work, Personal, My iPhone)
+  alias: String
+
+  # The phone number (ie. 123-456-7890 or 1234567890)
+  phoneNumber: OCPhoneNumber!
+
+  # The type of phone number
+  phoneType: PHONE_TYPE!
+}
+
+# The name details of a person
+type PersonName {
+  # Title (ie. Mr, Ms, Mrs, Dr)
+  title: String
+
+  # First name
+  first: String
+
+  # Middle name
+  middle: String
+
+  # Last name
+  last: String
+
+  # Suffix (ie. Jr, Sr, VII)
+  suffix: String
+}
+
+# Brand of a tenant
+type Brand {
+  # Name of the brand
+  name: String!
+
+  # Tenant associated with the brand
+  tenant: Tenant!
+
+  # Array of customer agreements (ie. privacy policy) that this brand requires
+  agreements: [BrandAgreement]
+
+  # Array of available customer preferences that can be set in the Customer object
+  preferences: [BrandCustomerPreference]
+
+  # The types of payment methods this brand supports
+  supportedPaymentTypes: [PAYMENT_INSTRUMENT_TYPE]
+}
+
+# A preference available to be set by customer of the brand
+type BrandCustomerPreference {
+  # ID of the preference
+  uuid: ID!
+
+  # Name of the preference (ie. email_newsletter)
+  name: String
+
+  # A description of the preference (ie. receive email newsletter)
+  description: String
+}
+
+# Agreement related to the brand (ie. privacy policy) This represents all of the agreements under a brand
+type BrandAgreement {
+  # Universally unique ID of the brand agreement
+  uuid: ID!
+
+  # Name of the agreement
+  name: String!
+
+  # The url to show the agreement
+  url: OCURL
+
+  # When this agreement was first active (indicating any user that agreed prior to this date needs to re-agree)
+  activeAt: OCDateTime
+}
+
+# Agreement related to a customer (This represents only the agreements that were agreed to)
+type CustomerAgreement {
+  # The current brand agreement this represents
+  brandAgreement: BrandAgreement
+
+  # Name of the agreement
+  name: String!
+
+  # The url to show the agreement that was originally signed
+  url: OCURL
+
+  # When the customer agreed to this agreement
+  agreedAt: OCDateTime
+}
+
+# A tenant of Open Commerce
+type Tenant {
+  # Potentially not unique name of the tenant
+  name: String!
+}
+
+# Address of site
+type Address {
+  # Name of the address
+  alias: String
+
+  # Street address (ie. 1234 Any St)
+  street1: String
+
+  # Secondary street address (ie. Apt 007)
+  street2: String
+
+  # City field
+  city: String
+
+  # State field
+  state: String
+
+  # Zip code (ie. 19103)
+  zipCode: String!
+
+  # Geo coordinates of the address
+  geoLocation: GeoLocation
+}
+
+# Coordinates of a geo location
+type GeoLocation {
+  # Latitude field
+  latitude: Float!
+
+  # Longitude field
+  longitude: Float!
+}
+
+# OTPMode mode enum
+enum OTP_MODE {
+  # Password reset otp mode
+  PASSWORD_RESET
+
+  # Sign in otp mode
+  SIGNIN
+
+  # Sign up otp mode
+  SIGNUP
+
+  # Update user identifier otp mode
+  UPDATE_IDENTIFIER
+}
+
+# Allowed phone number types
+enum PHONE_TYPE {
+  # Home land line
+  HOME
+
+  # Location (ie. a store)
+  LOCATION
+
+  # Mobile cellular based phone
+  MOBILE
+
+  # A work number
+  WORK
+}
+
+# Channel enum.
+enum OTP_CHANNEL {
+  # Email otp channel
+  EMAIL
+
+  # Sms otp channel
+  SMS
+}
+
+# Available days of the week
+enum WEEKDAY {
+  # Friday
+  FRIDAY
+
+  # Monday
+  MONDAY
+
+  # Saturday
+  SATURDAY
+
+  # Sunday
+  SUNDAY
+
+  # Thursday
+  THURSDAY
+
+  # Tuesday
+  TUESDAY
+
+  # Wednesday
+  WEDNESDAY
+}
+
+# The possible types of mobile device
+enum MOBILE_DEVICE_TYPE {
+  # Android based operating system
+  ANDROID
+
+  # Apple based operating system
+  IOS
+}
+
+# Customer details required to create a new customer
+input CustomerCreate {
+  # A unique to the tenant username
+  username: String!
+
+  # Customer's password
+  password: String
+
+  # Attributes regarding the customer's name
+  name: CustomerPersonNameCreate
+
+  # Email address
+  email: OCEmailAddress
+
+  # Addresses (ie. mailing)
+  addresses: [CustomerAddressCreate]
+
+  # New agreements customer is agreeing to
+  agreements: [CustomerAgreementCreate]
+
+  # Information regarding demographics details of the customer
+  demographics: CustomerDemographicsCreate
+
+  # Array of phone numbers that the customer can be reached at
+  phoneNumbers: [CustomerPhoneNumberCreate]
+
+  # Customer preferences (ie. should receipt be printed)
+  preferences: [CustomerPreferenceCreate]
+}
+
+# Attributes to be set when completing final step of new customer registration
+input CustomerRegistrationComplete {
+  # Which UUIDs of agreements to accept
+  acceptAgreement: [ID]
+
+  # Customer's email address
+  email: OCEmailAddress
+
+  # Customer's name
+  name: CustomerPersonNameCreate
+
+  # Demographics details (ie. birthday, gender)
+  demographics: CustomerDemographicsCreate
+
+  # Customer preferences (ie. email_newsletter)
+  preferences: [CustomerPreferenceCreate]
+
+  # The customer's default store
+  defaultLocationId: Int!
+}
+
+# Agreement related to a customer (This represents only the agreements that were agreed to)
+input CustomerAgreementCreate {
+  # Unique ID of the agreement
+  uuid: ID!
+}
+
+# A customer's preference (ie. receive email newsletter)
+input CustomerPreferenceCreate {
+  # ID of the brand defined customer preference
+  uuid: ID!
+
+  # Value of the preference (ie. true, 5, Some String)
+  value: PreferenceValueCreate
+}
+
+# The various data types allowable for a user preference
+input PreferenceValueCreate {
+  # boolean data type
+  booleanType: Boolean
+
+  # string data type
+  stringType: String
+
+  # integer data type
+  intType: Int
+
+  # float data type
+  floatType: Float
+}
+
+# Demographics data about a person/customer
+input CustomerDemographicsCreate {
+  # Birthday (ie. 1/1/1969)
+  birthday: OCDate
+
+  # Gender (ie. female)
+  gender: String
+
+  # Zip Code
+  zipCode: String
+
+  # Custom demographic attributes
+  customDemographics: OCJSON
+}
+
+# Input object for adding/editing a person's name
+input CustomerPersonNameCreate {
+  # Title (ie. Mr, Ms, Mrs, Dr)
+  title: String
+
+  # First name
+  first: String
+
+  # Middle name
+  middle: String
+
+  # Last name
+  last: String
+
+  # Suffix (ie. Jr, Sr, VII)
+  suffix: String
+}
+
+# A phone number to be potentially contacted on
+input CustomerPhoneNumberCreate {
+  # Name of the number (ie. Work, Personal, My iPhone)
+  alias: String
+
+  # The phone number (ie. 123-456-7890 or 1234567890)
+  phoneNumber: OCPhoneNumber!
+
+  # The type of phone number
+  phoneType: PHONE_TYPE!
+}
+
+# Input values for adding/editing an address
+input CustomerAddressCreate {
+  # Name of the address
+  alias: String!
+
+  # Street address (ie. 1234 Any St)
+  street1: String
+
+  # Secondary street address (ie. Apt 007)
+  street2: String
+
+  # City field
+  city: String
+
+  # State field
+  state: String
+
+  # Zip code (ie. 19103)
+  zipCode: String
+
+  # Geo coordinates of the address
+  geoLocation: GeoLocationCreate
+}
+
+# Details required to verify a customer (ie. OTP)
+input CustomerCreateVerify {
+  # The OTP
+  otp: OTP!
+}
+
+# Customer details being updated
+input CustomerUpdate {
+  username: String
+
+  # Attributes regarding the customer's name
+  name: CustomerPersonNameUpdate
+
+  # Email address
+  email: OCEmailAddress
+
+  # Addresses (ie. mailing)
+  addresses: [CustomerAddressUpdate]
+
+  # Information regarding demographics details of the customer
+  demographics: CustomerDemographicsUpdate
+
+  # Array of phone numbers that the customer can be reached at
+  phoneNumbers: [CustomerPhoneNumberUpdate]
+
+  # Customer preferences (ie. should receipt be printed)
+  preferences: [CustomerPreferenceUpdate]
+
+  # The customer's default store
+  defaultLocationId: Int
+
+  # Flag to determine if easy recharge is enabled for the account
+  easyRechargeEnabled: Boolean
+
+  # Flag to indicate if the user should see the App Rating Popup
+  shouldShowAppRatingPopup: Boolean
+
+  # Flag to indicate if the user has successfully transacted using the NFC
+  tappedNfc: Boolean
+}
+
+# A customer's preference (ie. receive email newsletter)
+input CustomerPreferenceUpdate {
+  # Universaly unique ID of the preference
+  uuid: ID
+
+  # A preference available to be set by customer of the brand
+  preference: BrandCustomerPreferenceUpdate
+
+  # Value of the preference (ie. true, 5, Some String)
+  value: PreferenceValueUpdate
+}
+
+input BrandCustomerPreferenceUpdate {
+  # ID of the preference
+  uuid: ID!
+
+  # Name of the preference (ie. email_newsletter)
+  name: String
+
+  # A description of the preference (ie. receive email newsletter)
+  description: String
+}
+
+# The various data types allowable for a user preference
+input PreferenceValueUpdate {
+  # boolean data type
+  booleanType: Boolean
+
+  # string data type
+  stringType: String
+
+  # integer data type
+  intType: Int
+
+  # float data type
+  floatType: Float
+}
+
+# Demographics data about a person/customer
+input CustomerDemographicsUpdate {
+  # Birthday (ie. 1/1/1969)
+  birthday: OCDate
+
+  # Gender (ie. female)
+  gender: String
+
+  # Zip Code
+  zipCode: String
+
+  # Custom demographic attributes
+  customDemographics: OCJSON
+}
+
+# Input object for adding/editing a person's name
+input CustomerPersonNameUpdate {
+  # Title (ie. Mr, Ms, Mrs, Dr)
+  title: String
+
+  # First name
+  first: String
+
+  # Middle name
+  middle: String
+
+  # Last name
+  last: String
+
+  # Suffix (ie. Jr, Sr, VII)
+  suffix: String
+}
+
+# A phone number to be potentially contacted on
+input CustomerPhoneNumberUpdate {
+  # Universally unique ID of the phone number
+  uuid: ID
+
+  # Name of the number (ie. Work, Personal, My iPhone)
+  alias: String
+
+  # The phone number (ie. 123-456-7890 or 1234567890)
+  phoneNumber: OCPhoneNumber!
+
+  # The type of phone number
+  phoneType: PHONE_TYPE!
+}
+
+# Input values for adding/editing an address
+input CustomerAddressUpdate {
+  # Name of the address
+  alias: String
+
+  # Street address (ie. 1234 Any St)
+  street1: String
+
+  # Secondary street address (ie. Apt 007)
+  street2: String
+
+  # City field
+  city: String
+
+  # State field
+  state: String
+
+  # Zip code (ie. 19103)
+  zipCode: String
+
+  # Geo coordinates of the address
+  geoLocation: GeoLocationUpdate
+}
+
+# A payment instrument to be added to Customer's wallet
+input CustomerPaymentInstrumentCreate {
+  name: CustomerPersonNameCreate
+
+  # Name of the instrument
+  alias: String
+
+  # Account number for the instrument
+  accountNumber: String
+
+  # Token generated to represent the instrument for transactions
+  nonce: String
+
+  # Billing address associated with the instrument
+  address: CustomerAddressCreate
+
+  # The type of the instrument
+  paymentType: PAYMENT_INSTRUMENT_TYPE
+
+  # The expiration date of this instrument
+  expiration: PaymentInstrumentExpirationInput
+
+  # The raw response from payment provider when creating payment method
+  rawResponse: OCJSON
+}
+
+# The expiration date of this instrument
+input PaymentInstrumentExpirationInput {
+  # The month of the expiration date, formatted MM.
+  expirationMonth: String
+  # The year of the expiration date, formatted YYYY.
+  expirationYear: String
+}
+
+# Verify the mutation of a payment instrument using OTP
+input CustomerPaymentInstrumentVerify {
+  # The OTP
+  otp: OTP!
+}
+
+# Payment Instrument details to be updated
+input CustomerPaymentInstrumentUpdate {
+  # Universally unique ID of the payment instrument
+  uuid: ID!
+
+  # Name of the instrument
+  alias: String
+
+  # Billing address associated with the instrument
+  address: CustomerAddressUpdate
+
+  # The type of the instrument
+  paymentType: PAYMENT_INSTRUMENT_TYPE
+
+  # The expiration date of this instrument
+  expiration: PaymentInstrumentExpirationInput
+}
+
+# A loyalty instrument to be added to the Customer's wallet
+input CustomerLoyaltyInstrumentCreate {
+  # Name of the instrument
+  alias: String!
+
+  # Account number
+  accountNumber: String!
+}
+
+# Loyalty Instrument details to be updated
+input CustomerLoyaltyInstrumentUpdate {
+  # Name of the instrument
+  alias: String!
+}
+
+# A Customer's username
+input CustomerUsername {
+  # The username
+  username: String!
+}
+
+# A Customer's Password
+input CustomerPassword {
+  # Entered password value
+  password: String!
+}
+
+# Set the initial password
+input CustomerPasswordSet {
+  # Customer's new password
+  newPassword: CustomerPassword!
+}
+
+# Change the password
+input CustomerPasswordChange {
+  # Current password
+  oldPassword: CustomerPassword!
+
+  # New password to change to
+  newPassword: CustomerPassword!
+}
+
+# Verify credentials are correct
+input CustomerPasswordCredentials {
+  # Customer's username
+  username: CustomerUsername!
+  # Entered password to verify
+  password: CustomerPassword!
+}
+
+# Verify password reset request using OTP
+input CustomerPasswordResetByOTPVerify {
+  # The OTP
+  otp: OTP!
+}
+
+# Reset the user's password with OTP
+input CustomerPasswordReset {
+  # New password to change to
+  newPassword: CustomerPassword!
+}
+
+# Verify a payment instrument after password reset
+input CustomerPasswordResetPaymentInstrumentVerify {
+  # Expiration date of payment instrument
+  expiration: PaymentInstrumentExpirationInput!
+}
+
+# New pin code details
+input CustomerPinCodeSet {
+  # Customer's new pin code
+  pinCode: CustomerPinCode!
+}
+
+# Details required to update a Customer's pin code
+input CustomerPinCodeChange {
+  # Customer's old pin code
+  oldPinCode: CustomerPinCode!
+
+  # Customer's new pin code
+  newPinCode: CustomerPinCode!
+}
+
+# Verify that the OTP is valid
+input CustomerOTPVerify {
+  # The OTP
+  otp: OTP!
+}
+
+# A customer's pin code
+input CustomerPinCode {
+  # The pin code
+  pinCode: String!
+}
+
+# Customer pin code to verify
+input CustomerPinCodeCredentials {
+  # Customer's username
+  username: CustomerUsername!
+
+  # Customer's pin code
+  pinCode: CustomerPinCode!
+}
+
+# Customer pin code to verify
+input CustomerPinCodeVerify {
+  # Customer's pin code
+  pinCode: CustomerPinCode!
+}
+
+# Create a device to be associated with the customer
+input CustomerDeviceCreate {
+  # Customer's name of device
+  alias: String!
+
+  # Unique id to represent the device
+  deviceID: ID!
+
+  # A string to describe the device
+  deviceType: String!
+}
+
+# Update a device already associated with the customer
+input CustomerDeviceUpdate {
+  # Customer's name of device
+  alias: String!
+
+  # A string to describe the device
+  deviceType: String!
+}
+
+# Input for requesting a OTP
+input CustomerOTPRequest {
+  # Email or phone
+  identifier: String!
+
+  # OTP channel (delivery method)
+  channel: OTP_CHANNEL
+
+  # OTP mode
+  mode: OTP_MODE
+}
+
+# A new user contact input
+input CustomerContact {
+  # User's comment
+  comment: String!
+
+  # User's email
+  email: OCEmailAddress
+
+  # User's phone
+  phone: String
+
+  # Store city
+  city: String
+
+  # Store state
+  state: String
+
+  # Store country
+  country: String
+
+  # Store address
+  address: String
+
+  # Store identifier
+  stationId: String
+
+  # Type of contact message
+  customerRequestType: CUSTOMER_REQUEST_TYPE!
+}
+
+# Inputs for user feedback
+input CustomerFeedback {
+  # Star rating of 1-5
+  rating: Int!
+
+  # User's comment
+  comment: String
+}
+
+# A filter for selecting customer's login history
+input CustomerLoginAttemptFilter {
+  # Login time range start
+  loginAtMin: OCDateTime
+
+  # Login time range end
+  loginAtMax: OCDateTime
+
+  # Login location filter
+  loginLocation: GeoLocationFilter
+
+  # Filter only successful or unsuccessful login attempts
+  wasSuccessful: Boolean
+
+  # Filter by the device attempting login
+  device: CustomerDeviceFilter
+}
+
+# Filter by a customer's device
+input CustomerDeviceFilter {
+  # Exact match only (cheaper than contains)
+  aliasEquals: String
+
+  # Alias contains all or part of string
+  aliasContains: String
+
+  # Exact match only (cheaper than contains)
+  deviceIDEquals: String
+
+  # Exact match only (cheaper than contains)
+  typeEquals: String
+}
+
+# Customer information
+type Customer {
+  uuid: ID!
+
+  # A unique to the tenant username
+  username: String!
+
+  # Indicates the customer is new and hasn't transacted yet
+  isNewCustomer: Boolean!
+
+  # Attributes regarding the customer's name
+  name: PersonName
+
+  # Email address
+  email: OCEmailAddress
+
+  # Flag to indicate if customer's email address has been verified
+  emailVerified: Boolean!
+
+  # Addresses (ie. mailing)
+  addresses: [Address]
+
+  # Wallet containing array of customer's payment methods (ie. a credit card, debit card, or prepaid card)
+  paymentWallet: [PaymentInstrument]
+
+  # Wallet containing array of customer's loyalty instruments
+  loyaltyWallet: [LoyaltyInstrument]
+
+  # Wallet containing array of customer's powercards
+  powercardWallet: [Powercard]
+
+  # Information regarding demographics details of the customer
+  demographics: Demographics
+
+  # Array of phone numbers that the customer can be reached at
+  phoneNumbers: [ContactPhoneNumber]
+
+  # The current status of the customer's account
+  status: CUSTOMER_STATUS!
+
+  # The agreements that have been accepted by the customer
+  agreements: [CustomerAgreement]
+
+  # The brands that a customer belongs to
+  brands: [Brand]
+
+  # Customer preferences (ie. should receipt be printed)
+  preferences: [CustomerPreference]
+
+  # Filter history of login attempts
+  loginHistory(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    filter: CustomerLoginAttemptFilter
+  ): CustomerLoginAttemptConnection
+
+  # The customer's default location (ie. default store)
+  defaultLocation: Location @deprecated
+
+  defaultLocationId: Int
+
+  # Devices associated with the customer
+  devices: [CustomerDevice]
+
+  # The privacy laws that govern this customer (ie. EU, USA)
+  privacyGovernance: String
+
+  # Transactions associated with the customer
+  transactions(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    filter: TransactionFilter
+  ): TransactionConnection
+
+  # Indicates whether the customer has set a passcode or not
+  hasPasscode: Boolean
+
+  # Flag to determine if easy recharge is enabled for the account
+  easyRechargeEnabled: Boolean
+
+  # Flag to indicate if the user should see the App Rating Popup
+  shouldShowAppRatingPopup: Boolean
+
+  # Flag to indicate if the user has successfully transacted using the NFC
+  tappedNfc: Boolean
+}
+
+# The various data types allowable for a user preference
+type PreferenceValue {
+  # boolean data type
+  booleanType: Boolean
+
+  # string data type
+  stringType: String
+
+  # integer data type
+  intType: Int
+
+  # float data type
+  floatType: Float
+}
+
+# A customer's preference (ie. receive email newsletter)
+type CustomerPreference {
+  # ID of the preference
+  uuid: ID!
+
+  # The preference that this value is associated with
+  preference: BrandCustomerPreference
+
+  # Value of the preference (ie. true, 5, Some String)
+  value: PreferenceValue
+}
+
+# Connection to return paginated login attempts
+type CustomerLoginAttemptConnection {
+  # Edges
+  edges: [CustomerLoginAttemptEdge]
+
+  # Pagination info
+  pageInfo: PageInfo!
+}
+
+# A login attempt to be returned
+type CustomerLoginAttemptEdge {
+  # Cursor of the current record
+  cursor: String!
+
+  # The login attempt
+  node: CustomerLoginAttempt
+}
+
+# Login attempt whether successful or not
+type CustomerLoginAttempt {
+  # Time the login attempt was made
+  loginAt: OCDateTime!
+
+  # Where the device attempting login was located
+  loginLocation: GeoLocation
+
+  # Whether the attempt resulted in a sucessful login
+  wasSuccessful: Boolean!
+
+  # The device used to login
+  device: CustomerDevice
+}
+
+# A device (ie. iPhone, Android, Windows)
+type CustomerDevice {
+  # Customer's name of device
+  alias: String!
+
+  # Unique id to represent the device
+  deviceID: ID!
+
+  # A string to describe the device
+  deviceType: String!
+}
+
+# Demographics data about a person/customer
+type Demographics {
+  # Birthday (ie. 1/1/1969)
+  birthday: OCDate
+
+  # Gender (ie. female)
+  gender: String
+
+  # Zip Code
+  zipCode: String
+
+  # Custom demographic attributes
+  customDemographics: OCJSON
+}
+
+# A method of payment
+type PaymentInstrument {
+  # Universally Unique ID of the instrument
+  uuid: ID!
+
+  # Name of the instrument
+  alias: String
+
+  # The display value to represent the card from payment provider for use by the client (ie. Visa ............4568)
+  providerNickName: String
+
+  # Account number for the instrument
+  accountNumber: String
+
+  # Billing address associated with the instrument
+  address: Address
+
+  # The type of the instrument
+  paymentType: PAYMENT_INSTRUMENT_TYPE
+
+  # The expiration date of this instrument
+  expiration: PaymentInstrumentExpiration
+
+  # Current status (ie. active, pending verification)
+  status: PAYMENT_INSTRUMENT_STATUS!
+
+  # Is this the customer's default payment method
+  isDefault: Boolean
+
+  # The number to be displayed on the client side to represent this instrument
+  displayNumber: String
+
+  # The payment provider that should be processing the payments using this instrument
+  paymentProvider: PaymentProvider
+}
+
+# The expiration date of this instrument
+type PaymentInstrumentExpiration {
+  # The month of the expiration date, formatted MM.
+  expirationMonth: String
+  # The year of the expiration date, formatted YYYY.
+  expirationYear: String
+}
+
+# A payment provider used for processing payments
+type PaymentProvider {
+  # Name of the provider
+  name: String!
+}
+
+# The equivalent of a loyalty card
+type LoyaltyInstrument {
+  # Universally Unique ID of the instrument
+  uuid: ID!
+
+  # Name of the instrument
+  alias: String!
+
+  # Account number
+  accountNumber: String!
+
+  # Whether or not this instrument is active or inactive
+  status: LOYALTY_INSTRUMENT_STATUS!
+}
+
+# type of OTP payload attributes
+type CustomerOTPPayload {
+  # Authentication session token
+  session: String
+
+  # OTP request response status
+  success: Boolean!
+}
+
+# Allowed status of the customer
+enum CUSTOMER_STATUS {
+  # Active
+  ACTIVE
+
+  # Blacklisted and unallowed to login/use services
+  BLACKLISTED
+
+  # Needing review but allowed to login/use services
+  FLAGGED_FOR_REVIEW
+
+  # Inactive and unallowed to login/use services
+  INACTIVE
+
+  # Signed up but not started verification unallowed to login/use services
+  SIGNED_UP
+
+  # Signup was started but not yet complete
+  SIGNUP_NOT_COMPLETED
+
+  # Started verification but not completed unallowed to login/use services
+  WAITING_FOR_VERIFICATION
+
+  # Whitelisted from any throttling triggers (ie. used for QA testing accounts)
+  WHITELISTED
+}
+
+# Status of a payment instrument
+enum PAYMENT_INSTRUMENT_STATUS {
+  # Active status
+  ACTIVE
+
+  # Inactive and unallowed to be used
+  INACTIVE
+
+  # Pending verification to be put into use
+  PENDING
+}
+
+# Status of a loyalty instrument
+enum LOYALTY_INSTRUMENT_STATUS {
+  # Active status
+  ACTIVE
+
+  # Inactive and unallowed to be used
+  INACTIVE
+}
+
+# Allowed payment instrument types
+enum PAYMENT_INSTRUMENT_TYPE {
+  # Amazon Pay
+  AMAZON_PAY
+
+  # American Express
+  AMERICAN_EXPRESS
+
+  # Apple Pay
+  APPLE_PAY
+
+  # Apple Pay - Visa
+  APPLE_PAY_VISA
+
+  # Apple Pay - Mastercard
+  APPLE_PAY_MASTERCARD
+
+  # Apple Pay - American Express
+  APPLE_PAY_AMERICAN_EXPRESS
+
+  # Apple Pay - Discover
+  APPLE_PAY_DISCOVER
+
+  # Cartes Bancaires
+  CARTES_BANCAIRES
+
+  # Chase Pay
+  CHASE_PAY
+
+  # China Union Pay
+  CHINA_UNION_PAY
+
+  # Citi Pay
+  CITI_PAY
+
+  # Credit card
+  CREDIT
+
+  # Debit card
+  DEBIT
+
+  # Discover
+  DISCOVER
+
+  # EFTPOS
+  EFTPOS
+
+  # Gift card
+  GIFT
+
+  # Google Pay
+  GOOGLE_WALLET
+
+  # Google Pay
+  GOOGLE_PAY
+
+  # Google Pay - Visa
+  GOOGLE_PAY_VISA
+
+  # Google Pay - Mastercard
+  GOOGLE_PAY_MASTERCARD
+
+  # Google Pay - American Express
+  GOOGLE_PAY_AMERICAN_EXPRESS
+
+  # Google Pay - Discover
+  GOOGLE_PAY_DISCOVER
+
+  # ID Credit
+  ID_CREDIT
+
+  # Interac
+  INTERAC
+
+  # JCB
+  JCB
+
+  # Maestro
+  MAESTRO
+
+  # MasterCard
+  MASTERCARD
+
+  # Mastercard Masterpass
+  MASTERPASS
+
+  # Paypal
+  PAYPAL
+
+  # Prepaid card
+  PREPAID
+
+  # Private Label
+  PRIVATE_LABEL
+
+  # Quic Pay
+  QUIC_PAY
+
+  # Suica
+  SUICA
+
+  # Venmo
+  VENMO
+
+  # Visa
+  VISA
+
+  # Visa Checkout
+  VISA_CHECKOUT
+
+  # Visa VPay
+  VISA_VPAY
+}
+
+# Different types of customer requests available
+enum CUSTOMER_REQUEST_TYPE {
+  # Complaint contact type
+  COMPLAINT
+
+  # Compliment contact type
+  COMPLIMENT
+
+  # Questionsign contact type
+  QUESTION
+}
+
+# Filter values for selecting locations
+input LocationFilter {
+  # Universally unique ID equals exact match
+  uuidEquals: ID
+
+  # Select by attributes' value
+  attributes: LocationAttributeFilter
+
+  # Select by resources' value
+  resources: LocationResourceFilter
+
+  # Brand
+  brand: BrandFilter
+
+  # Select by open commerce feature details at location
+  openCommerceFeatures: OpenCommerceFeatureFilter
+
+  # The radius in km to return results for, must also provide geoLocation
+  radius: Float
+
+  # The location to use as epicenter of search
+  geoLocationEquals: GeoLocationCreate
+}
+
+# A filter for selecting locations with matching attributes
+input LocationAttributeFilter {
+  # Part or entire attribute name match
+  nameContains: String
+
+  # Exact match only (cheaper than contains)
+  nameEquals: String
+
+  # Part or entire attribute description match
+  descriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  descriptionEquals: String
+
+  # Part or entire attribute value match
+  valueContains: String
+
+  # Exact match only (cheaper than contains)
+  valueEquals: String
+}
+
+# A filter for selecting locations with matching resources
+input LocationResourceFilter {
+  # Exact match only (cheaper than contains)
+  typeEquals: LOCATION_RESOURCE_TYPE
+
+  # The type of resource to lookup
+  typeContains: [LOCATION_RESOURCE_TYPE]
+
+  # Lookup by items matching the filter
+  items: ResourceItemFilter
+
+  # The current status of the resource at the location
+  statusEquals: LOCATION_RESOURCE_STATUS
+
+  # Matches any statuses in the array
+  statusContains: [LOCATION_RESOURCE_STATUS]
+}
+
+# Filter by attributes of an item
+input ResourceItemFilter {
+  # Universally unique id of the item
+  uuid: ID
+
+  # All or part of SKU Unique to the brand
+  skuContains: String
+
+  # Exact match only (cheaper than contains)
+  skuEquals: String
+
+  # All or part of description
+  descriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  descriptionEquals: String
+
+  # Minimum unit price
+  unitPriceMin: Float
+
+  # Maximum unit price
+  unitPriceMax: Float
+
+  # Exact match only (cheaper than contains)
+  unitPriceEquals: Float
+
+  # Type of item
+  itemTypeEquals: RESOURCE_ITEM_TYPE
+
+  # matches any type in the array
+  itemTypeContains: [RESOURCE_ITEM_TYPE]
+
+  # All or part of merchandise code
+  merchandiseCodeContains: String
+
+  # Exact match only (cheaper than contains)
+  merchandiseCodeEquals: String
+
+  # All or part of the POS Code
+  posCodeContains: String
+
+  # Exact match only (cheaper than contains)
+  posCodeEquals: String
+
+  # All or part of the POS Code Modifier
+  posCodeModifierContains: String
+
+  # Exact match only (cheaper than contains)
+  posCodeModifierEquals: String
+
+  # All or part of the POS Code Format
+  posCodeFormatContains: String
+
+  # Exact match only (cheaper than contains)
+  posCodeFormatEquals: String
+
+  # Unit of Measure (ie. ea, lb, gal)
+  unitOfMeasureContains: String
+
+  # Exact match only (cheaper than contains)
+  unitOfMeasureEquals: String
+
+  # All or part of the description to be printed on a receipt
+  receiptDescriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  receiptDescriptionEquals: String
+}
+
+# A filter for selecting locations with matching Open Commerce Feature support
+input OpenCommerceFeatureFilter {
+  # Part or entire name of the feature
+  nameContains: String
+
+  # Exact match only (cheaper than contains)
+  nameEquals: String
+
+  # Part or entire description of the feature
+  descriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  descriptionEquals: String
+
+  # Part or entire value of the feature
+  valueContains: String
+
+  # Exact match only (cheaper than contains)
+  valueEquals: String
+}
+
+# The current location of the user to check into a store
+input LocationCheckIn {
+  # Current location
+  geoLocation: GeoLocationCreate
+}
+
+# A location such as a store or gas station
+type Location {
+  # The id specific to the brand (ie. Store Number 5)
+  brandSpecificLocationId: Int
+
+  # Physical address
+  address: Address
+
+  # Attributes (ie. carwash, service bay)
+  attributes: [LocationAttribute]
+
+  # Resources (ie. car wash, fuel pump)
+  resources: [LocationResource]
+
+  # Distance in km to the location from users geocode
+  distance: Float
+
+  # Brand
+  brand: Brand
+
+  # Phone number
+  phoneNumbers: [ContactPhoneNumber]
+
+  # Array of Open Commerce features and whether or not they are supported
+  openCommerceFeatures: [OpenCommerceFeature]
+
+  # Array of days with their hours
+  hoursOfOperationGroup: HoursOfOperationGroup
+
+  # Any special case hours that should be shown
+  specialHours: String
+}
+
+# Connection to return paginated locations
+type LocationConnection {
+  # Edges
+  edges: [LocationEdge]
+
+  # Pagination info
+  pageInfo: PageInfo!
+}
+
+# A location to be returned
+type LocationEdge {
+  # Cursor of the Location
+  cursor: String!
+
+  # The Location
+  node: Location
+}
+
+# Group of hours
+type HoursOfOperationGroup {
+  # Name of the group (ie. Regular Business Hours)
+  alias: String
+
+  # Array of hours (ie. this could be a record for each weekday, or multiple for each day, or just a single record)
+  hours: [HoursOfOperation]
+}
+
+# Times a location is open
+type HoursOfOperation {
+  # Which day are these hours for
+  dayOfWeek: WEEKDAY
+
+  # Time the location opens
+  openTime: String
+
+  # Time the location closes
+  closeTime: String
+
+  # If hours are not broken down by day of week
+  genericHoursString: String
+}
+
+# A feature specific to Open Commerce
+type OpenCommerceFeature {
+  # Name of the feature
+  name: String!
+
+  # Description of the feature
+  description: String
+
+  # Value of the feature
+  value: String
+}
+
+# An attribute of the location (ie. carwash, service bay)
+type LocationAttribute {
+  # Name of the attribute
+  name: String!
+
+  # Description of the attribute
+  description: String
+
+  # Value of the attribute
+  value: String
+}
+
+# A resource which contains sale itesm such as fuel pump or store
+type LocationResource {
+  # The type of resource
+  resourceType: LOCATION_RESOURCE_TYPE!
+
+  # The position of the resource within the Location (ie. pump number)
+  position: String
+
+  # Items available at the resource
+  items(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    filter: ResourceItemFilter
+  ): ResourceItemConnection
+
+  # Status of the resource
+  status: LOCATION_RESOURCE_STATUS
+}
+
+# An item at a resource
+type ResourceItem {
+  # Universally unique ID of the item
+  uuid: ID!
+
+  # SKU unique to the Brand
+  sku: String!
+
+  # Description
+  description: String
+
+  # Price per unit
+  unitPrice: ResourceItemPrice
+
+  # Type of item (ie. tobacco, fuel)
+  itemType: RESOURCE_ITEM_TYPE
+
+  # Merchandise Code
+  merchandiseCode: String
+
+  # POS Code
+  posCode: String
+
+  # POS Code Modifier
+  posCodeModifier: String
+
+  # Format of the POS Code
+  posCodeFormat: String
+
+  # Unit of measure (ex. ea, gal)
+  unitOfMeasure: String
+
+  # Description of item to go on receipt
+  receiptDescription: String
+}
+
+# Price details of an item
+type ItemPrice {
+  # Price to use for display purposes (ie. $1.23)
+  displayPrice: String!
+
+  # Price in number format (ie. 1.23)
+  price: Float!
+}
+
+# Connection to return paginated locations
+type ResourceItemConnection {
+  # Edges
+  edges: [ResourceItemEdge]
+
+  # Pagination info
+  pageInfo: PageInfo!
+}
+
+# A location to be returned
+type ResourceItemEdge {
+  # Cursor of the Location
+  cursor: String!
+
+  # The Location
+  node: ResourceItem
+}
+
+# Price of an item
+type ResourceItemPrice {
+  # Price if paying by credit card
+  creditPrice: Float!
+
+  # Price if paying by cash
+  cashPrice: Float!
+}
+
+# Type of an item
+enum RESOURCE_ITEM_TYPE {
+  # Carwash
+  CAR_WASH
+
+  # Fuel
+  FUEL
+
+  # Lottery
+  LOTTERY
+
+  # Misc Convenience Item
+  MISC_CONVENIENCE
+
+  # Snacks
+  SNACK
+
+  # Tobacco
+  TOBACCO
+}
+
+# Type of a resource
+enum LOCATION_RESOURCE_TYPE {
+  # Car wash
+  CAR_WASH
+
+  # Fuel pump
+  FUEL_PUMP
+
+  # Store
+  STORE
+}
+
+# Status of a resource
+enum LOCATION_RESOURCE_STATUS {
+  # Available
+  AVAILABLE
+
+  # In Use
+  INUSE
+
+  # Offline
+  OFFLINE
+
+  # Unavailable
+  UNAVAILABLE
+}
+# Union for logging in, if OTP auth fails, need to send a new session to retry
+union CustomerOTPPayloadOrAuthPayload = CustomerOTPPayload | AuthPayload
+
+# All API Mutations
+type Mutation {
+  # Accept an agreement of ID
+  acceptAgreement(
+    # Unique ID of the agreement
+    id: ID!
+  ): CustomerAgreement
+
+  # Create a new customer
+  customerCreate(
+    # New customer information
+    input: CustomerCreate!
+  ): Customer
+
+  # Verify a customer account
+  customerCreateVerify(
+    # Details to verify the account
+    input: CustomerCreateVerify!
+  ): Customer
+
+  # Update a customer
+  customerUpdate(
+    # Update customer information
+    input: CustomerUpdate!
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): Customer
+
+  # Delete the currently logged in customer
+  customerDelete: Boolean!
+
+  # Add a payment instrument to the customer's wallet
+  customerPaymentInstrumentCreate(
+    # Payment instrument details
+    input: CustomerPaymentInstrumentCreate!
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): PaymentInstrument!
+
+  # Verify adding a payment instrument with OTP
+  customerPaymentInstrumentVerify(
+    # The verification mechanism
+    input: CustomerPaymentInstrumentVerify!
+  ): PaymentInstrument!
+
+  # Update the details of a customer's payment instrument
+  customerPaymentInstrumentUpdate(
+    # Payment instrument details
+    input: CustomerPaymentInstrumentUpdate!
+  ): PaymentInstrument!
+
+  # Delete a payment instrument from the customer's walet
+  customerPaymentInstrumentDelete(
+    # Unique ID of the payment instrument
+    uuid: ID!
+  ): [PaymentInstrument]!
+
+  # Add a loyalty instrument to the customer's wallet
+  customerLoyaltyInstrumentCreate(
+    # The loyalty instrument to be created
+    input: CustomerLoyaltyInstrumentCreate!
+  ): LoyaltyInstrument
+
+  # Update the details of a customer's loyalty instrument
+  customerLoyaltyInstrumentUpdate(
+    # The loyalty instrument to be updated
+    input: CustomerLoyaltyInstrumentUpdate!
+  ): LoyaltyInstrument
+
+  # Delete a loyalty instrument from the customer's walet
+  customerLoyaltyInstrumentDelete(
+    # The loyalty instrument uuid to be deleted
+    uuid: ID!
+  ): Boolean
+
+  # Set the initial password for the customer
+  customerPasswordSet(
+    # Initial password
+    input: CustomerPasswordSet!
+  ): Boolean
+
+  # Change to a new password
+  customerPasswordChange(
+    # The user's old and new passwords
+    input: CustomerPasswordChange!
+  ): Boolean
+
+  # Log the customer in using their password (not to be confused with Pin Code)
+  customerLoginByPassword(
+    # Customer's credentials
+    input: CustomerPasswordCredentials!
+  ): AuthPayload
+
+  # Verify an entered password is correct
+  customerPasswordVerify(
+    # Verify a customer's entered password is correct
+    input: CustomerPassword!
+  ): Boolean
+
+  # Verify password reset request
+  customerPasswordResetByOTPVerify(
+    # OTP to reset password
+    input: CustomerPasswordResetByOTPVerify!
+  ): Boolean
+
+  # Reset a customer's password
+  customerPasswordReset(
+    # The new password
+    input: CustomerPasswordReset!
+  ): Boolean
+
+  # Verify a payment method after password reset
+  customerPasswordResetPaymentInstrumentVerify(
+    # Expiration date of a payment method to verify
+    input: CustomerPasswordResetPaymentInstrumentVerify!
+  ): Boolean
+
+  # Create a device associated with the customer
+  customerDeviceCreate(
+    # The device details
+    input: CustomerDeviceCreate!
+  ): CustomerDevice
+
+  # Update a device already associated with the customer
+  customerDeviceUpdate(
+    # The device details
+    input: CustomerDeviceUpdate!
+  ): CustomerDevice
+
+  # Delete a device already assocated with the customer
+  customerDeviceDelete(
+    # Device id
+    deviceID: ID!
+  ): Boolean
+
+  # Register a user device's unique push notification token
+  customerPushNotificationTokenRegister(token: ID!): Boolean
+
+  # Initiate the email verification workflow
+  customerEmailVerificationSend: Boolean
+}
+# Fields to add a new virtual powercard to wallet
+input VirtualPowercardCreate {
+  # The Store Id (aka Store Number) for the store in which the card is to be activated.
+  storeId: ID
+
+  # The Item ID of the Rate Card selected by the user, which will be used to determine activation fee, number of chips, etc.
+  rateCardItemIds: [Int]!
+
+  # The identifier for the offer
+  offerId: Int
+
+  # The payment instrument's UUID being used to purchase chips
+  paymentInstrumentId: ID
+
+  # A one time token to represent a payment method
+  nonce: String
+
+  # Customer's personal name for the card
+  alias: String
+
+  # The corresponding Country for the specified Card Number, which will be “USA” or “CAN”.
+  country: String!
+
+  # The amount paid for the chips, which should be limited to 2 decimal places and greater than or equal to 0.00. Note, this amount should include the activation fee, and will be validated against the amount(s) assigned to the Rate Card item to verify purchase amount.
+  dollarsPaid: Float!
+
+  # Image to be used on cover of card
+  imagePackUuid: ID
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  # Payment instrument type must be provided when using the nonce
+  paymentInstrumentType: PAYMENT_INSTRUMENT_TYPE
+}
+
+# Fields to add a new physical powercard to wallet
+input PowercardCreate {
+  # The Card Encoding consists of the Track1 information obtained from a card swipe. This string should begin with ‘%’, end with ‘?’, and be 14 characters in length.
+  cardEncoding: String
+
+  # The Card Number, which can range between 0 to 2,176,782,335.
+  cardNumber: String
+
+  # The RFID Data is a 64-character Base64 encoded string containing the encrypted data read from the RFID tag.
+  rfidData: String
+
+  # Customer's name for the card
+  alias: String
+
+  # Image to be used on cover of card
+  imagePackUuid: ID
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  # The security identification number associated with the specified Card Number.
+  pin: Int
+
+  # One-time-use token generated to represent the instrument for transactions
+  nonce: String
+
+  # Payment instrument type must be provided when using the nonce
+  paymentInstrumentType: PAYMENT_INSTRUMENT_TYPE
+}
+
+# Fields to update a powercard
+input PowercardAttributesUpdate {
+  # Customer's name for the card
+  alias: String
+
+  # Image to be used on cover of card
+  imagePackUuid: ID
+
+  # Indicates whether the Power Card is registered in Rewards. (Only one card can be registered for rewards)
+  isRegisteredReward: Boolean
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+}
+
+# Input required to add additional powercard funds to the powercard
+input PowercardFundsAdd {
+  # Universally unique ID of the card to add funds to
+  uuid: ID!
+
+  # Store where the purchase is taking place
+  storeId: Int
+
+  # Rate card item to be used
+  rateCardItemIds: [Int]!
+
+  # The identifier for the offer
+  offerId: Int
+
+  # Payment instrument to be used
+  paymentInstrumentUuid: ID
+
+  # A one time token to represent a payment method
+  nonce: String
+
+  # The corresponding Country for the specified Card Number, which will be “USA” or “CAN”.
+  country: String!
+
+  # The amount paid for the chips, which should be limited to 2 decimal places and greater than or equal to 0.00. Note, this amount should include the activation fee, and will be validated against the amount(s) assigned to the Rate Card item to verify purchase amount.
+  dollarsPaid: Float!
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  # Payment instrument type must be provided when using the nonce
+  paymentInstrumentType: PAYMENT_INSTRUMENT_TYPE
+
+  # Payment billing data (Billing address information associated with a specific customer ID.)
+  billing: BillingInput
+}
+
+# Filter for selecting rate cards
+input RateCardFilter {
+  # Use the store ID to select a specific store
+  storeId: Int
+
+  # The center point to do a geo search from
+  epicenter: GeoLocationCreate
+
+  # Distance from the epicenter to find a store
+  radius: Float
+
+  # Just select the closest store to the provided epicenter regardless of radius being set or not
+  simpleClosest: Boolean
+
+  isNewCustomer: Boolean
+}
+
+# A powercard
+type Powercard {
+  # Universally unique ID of the card
+  uuid: ID!
+
+  # Is this a physical or virtual card
+  isPhysical: Boolean!
+
+  # card number on the powercard
+  cardNumber: String
+
+  # the status of the powercard
+  status: POWERCARD_STATUS_TYPE
+
+  # the type of card
+  cardType: POWERCARD_CARD_TYPE
+
+  # the card alias string
+  cardAlias: String
+
+  # array of images associated with the card
+  imagePack: PowercardImagePack
+
+  # The total number of chips that can be used to play any type of game (except Attraction games).
+  gameChips: Float
+
+  # The total number of chips that can be used to play simulator games (i.e., non-redemption games).
+  videoChips: Float
+
+  # The total number of reward chips earned through the rewards system.
+  rewardChips: Float
+
+  # The total number of chips that can be used to play attraction games.
+  attractionChips: Float
+
+  # The total number of tickets on the card.
+  tickets: Int
+
+  # The total number of Reward points earned for the current reward threshold for the card.
+  rewardPoints: Float
+
+  # The number of Reward points needed to achieve the next reward.
+  pointsToNextReward: Float
+
+  # Indicates whether the Power Card is registered in Rewards. (Only one card can be registered for rewards)
+  isRegisteredReward: Boolean
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  # URLs to wallet passes
+  walletPass: WalletPassUrl
+}
+
+# The url to the wallet pass
+type WalletPassUrl {
+  # Url which contains a .pkpass file to be downloaded
+  pkPassUrl: OCURL
+
+  # deeplink for android (https://pay.google.com/gp/v/save/{jwt_generated})
+  googlePayUrl: OCURL
+}
+
+# A pack of images for use on the cover of powercard
+type PowercardImagePack {
+  # powercard image's id
+  uuid: ID!
+
+  # Array of various full size image resoltuions
+  fullsizeImages: [PowercardImage]
+
+  # Array of various thumbnail image resoltuions
+  thumbnailImages: [PowercardImage]
+
+  # Name of the image from the collection of images available
+  name: String
+}
+
+# An image for use on the cover of powercard
+type PowercardImage {
+  # powercard images' url
+  url: OCURL
+
+  # Width in pixels
+  width: Int
+
+  # Height in pixels
+  height: Int
+}
+
+# Generic response object
+type Response {
+  # The text status (ie. Record Deleted)
+  status: String
+
+  # Whether the request was successful or not
+  success: Boolean
+}
+
+# Types of powercards
+enum POWERCARD_CARD_TYPE {
+  # Comp card
+  COMP
+
+  # Diagnostics card
+  DIAGNOSTICS
+
+  # Employee card
+  EMPLOYEE
+
+  # Gold card
+  GOLD
+
+  # Power card
+  POWER
+
+  # Power hour card
+  POWER_HOUR
+
+  # Service card
+  SERVICE
+
+  # VIP card
+  VIP
+
+  # WHQ Service card
+  WHQ_SERVICE
+}
+
+# Possible status of a powercard
+enum POWERCARD_STATUS_TYPE {
+  # Card is disabled
+  DISABLED
+
+  # Card is inactive
+  INACTIVE
+
+  # Card is open
+  OPEN
+
+  # Card reported stolen
+  STOLEN
+
+  # VIP Card
+  VIP
+
+  # Card is voided
+  VOID
+}
+
+# All API Queries
+type Query {
+  # Returns the currently logged in customer
+  currentCustomer: Customer
+
+  # Get a client token for client side nonce generation for transaction payment
+  clientPaymentToken(
+    # The Customer ID specific to BrainTree
+    customerId: ID
+  ): ClientToken
+}
+
+# Filter by loyalty instrument
+input LoyaltyInstrumentFilter {
+  # Exact match only (cheaper than contains)
+  aliasEquals: String
+
+  # Match portion or entire alias
+  aliasContains: String
+
+  # Exact match only (cheaper than contains)
+  accountNumberEquals: String
+}
+
+# Receipt details as printed
+type FuelReceipt {
+  # Product name
+  product: String!
+
+  # Gallons of fuel pumped
+  gallons: String
+
+  #Price per gallon
+  priceG: String
+
+  # Total fuel cost
+  fuelSale: String
+
+  # Express car wash details
+  expressCarwash: String
+
+  # Tax amount
+  tax: String!
+
+  # Total sale amount
+  totalSale: String!
+
+  # Raw receipt data
+  rawReceipt: String!
+
+  # Code to activate car wash
+  carWashCode: String
+
+  # Name of the car wash purchased
+  carWashName: String
+
+  # Price of the car wash
+  carWashPrice: String
+
+  # Address of location
+  address: Address
+}
+
+# Transaction details
+type Transaction {
+  # Universally unique identifier which is unique across database
+  uuid: ID!
+
+  # Unique transaction identifier
+  umti: String
+
+  # The currency type of an item
+  currency: ItemCurrency!
+
+  # The id of the transaction created by the payment provider
+  paymentProviderTransactionId: String
+
+  # Single Transaction Authorization Code (only present for an in-store transaction)
+  stac: STAC
+
+  # When the transaction was started
+  startedAt: OCDateTime!
+
+  # When the transaction was last updated
+  lastUpdatedAt: OCDateTime!
+
+  # When the transaction was completed
+  completedAt: OCDateTime
+
+  # Current status
+  status: TRANSACTION_STATUS!
+
+  # Loyalty instrumnets used
+  loyaltyInstruments: [LoyaltyInstrument]
+
+  # Payment info
+  paymentInfo: [TransactionPaymentInfo]
+
+  # Location the transaction is taking place at
+  location: Location!
+
+  # Pump number
+  fuelingPosition: String
+
+  # Items being purchased
+  items: [TransactionItem]
+
+  # Auth code
+  authCode: String
+
+  # Total dollar amount
+  amount: ItemPrice
+
+  # Tax portion of the total
+  tax: ItemPrice
+
+  # The amount of the price that was refunded
+  refundedAmount: ItemPrice
+
+  # POS Vendor
+  hardwareVendor: HARDWARE_VENDOR
+
+  # Type of transaction
+  transactionType: TRANSACTION_TYPE!
+
+  # Level of the payment
+  paymentLevel: PAYMENT_LEVEL
+
+  # Level of the loyalty
+  loyaltyLevel: LOYALTY_LEVEL
+
+  # Current fuel pump action
+  fuelPumpStatus: FUEL_PUMP_STATUS
+
+  # Where the transaction was initiated
+  initiationResource: LOCATION_RESOURCE_TYPE
+
+  # The receipt lines
+  receiptLines: [ReceiptLine]
+
+  # The raw receipt as received
+  rawReceipt: String
+
+  # Specifically a receipt for fuel
+  fuelReceipt: FuelReceipt
+
+  # Events that have occurred with this transaction and the payment service
+  paymentEvents: [TransactionPaymentEvent]
+
+  additionalReceiptData: OCJSON
+
+  # type of purchase
+  purchaseType: TRANSACTION_PURCHASE_TYPE
+
+  # Check number to be included on the receipt
+  checkNumber: Int
+}
+
+# A payment service event (ie. void, normal, reversal)
+type TransactionPaymentEvent {
+  # Universally unique ID of the event
+  uuid: ID!
+
+  # Type of event
+  transactionEventType: TRANSACTION_EVENT_TYPE
+
+  # When the event took place
+  completedAt: OCDateTime
+
+  # Any payment processor specific information regarding the event
+  paymentInformation: OCJSON
+
+  # The description of the event
+  reasonDescription: String!
+
+  # Was the event successful?
+  success: Boolean!
+}
+
+# A transaction service error
+type TransactionServiceError {
+  # The error message
+  errorMessage: String!
+
+  # Additional details about the error (optional)
+  errorDetails: OCJSON
+
+  # The error code (optional)
+  errorCode: Int
+}
+
+enum TRANSACTION_EVENT_TYPE {
+  # A payment that is being voided
+  VOID
+
+  # A payment that is being used for a full transaction refund
+  FULL_REFUND
+
+  # A payment that is being used for a partial refund of transaction (ie. a single item)
+  PARTIAL_REFUND
+
+  # Payment is pending auth to be manually settled
+  PRE_AUTH
+
+  # Payment is authorized and part of next settlement batch
+  AUTH
+
+  # Transaction is fully settled with host payment provider
+  SETTLED
+
+  # The attempted transaction is invalid
+  INVALID_ACTION
+}
+
+# An item used in a transaction
+type TransactionItem {
+  # The item from the location resource that this represents
+  resourceItem: ResourceItem
+
+  # The quantity of the item on the transaction (ie. 1, 1.3)
+  qty: Float
+
+  # Total price of the item (ie. unit price x qty)
+  amount: ItemPrice
+
+  # Total tax of the item as it pertains to the invoice total
+  tax: ItemPrice
+
+  # Amount of discount applied to the item
+  discountApplied: ItemPrice
+
+  # Description of the discount applied
+  discountDescription: String
+
+  # type of item
+  itemType: TRANSACTION_ITEM_TYPE
+}
+
+# POS Hardware Vendors
+enum HARDWARE_VENDOR {
+  # Gilbarco
+  GILBARCO
+
+  # NCR
+  NCR
+
+  # Internal
+  STUZO
+
+  # Verifone
+  VERIFONE
+}
+
+# Level of payment
+enum PAYMENT_LEVEL {
+  # Processing payment through our MPPA
+  ABOVE_SITE
+
+  # Processing payment at the site
+  SITE_LEVEL
+}
+
+# Level of loyalty
+enum LOYALTY_LEVEL {
+  # Processing loyalty through our MPPA
+  ABOVE_SITE
+
+  # Processing loyalty at the site
+  SITE_LEVEL
+}
+
+# Possible types of transactions
+enum TRANSACTION_TYPE {
+  # A pay-at-pump transaction
+  AT_PUMP
+
+  # An in-store transaction
+  IN_STORE
+}
+
+enum TRANSACTION_ITEM_TYPE {
+  # Sale item
+  SALE
+
+  # Tender item
+  TENDER
+
+  # Tip
+  TIP
+
+  # Discount
+  DISCOUNT
+
+  # Other
+  OTHER
+}
+
+# Current transaction status
+enum TRANSACTION_STATUS {
+  # The transaction is ongoing, but has not been submitted for authorization
+  ACTIVE
+
+  # The checkout token is in use by an open transaction
+  BLOCKED
+
+  # Terminated by request
+  CANCELED
+
+  # Completed successfully
+  CLOSED
+
+  # Completed but failed due to authorization error
+  COMPLETED_FAILED_AUTHORIZATION
+
+  # Completed but failed due to error on receipt
+  COMPLETED_FAILED_ON_RECEIPT
+
+  # Completed but failed due to settlement error
+  COMPLETED_FAILED_SETTLEMENT
+
+  # Completed but failed due to pump enable error
+  COMPLETED_FAILED_TO_ENABLE_PUMP
+
+  # Completed but failed due to pump reservation error
+  COMPLETED_FAILED_TO_RESERVE_PUMP
+
+  # The transaction timed out
+  EXPIRED
+
+  # Terminated due to an error
+  FAILED
+
+  # Reversed due to server unresponsiveness
+  FULL_REVERSAL
+
+  # The server is awaiting confirmation of the full-reversal request
+  FULL_REVERSAL_PENDING
+
+  # The transaction is ongoing, but has not been submitted for authorization
+  OPEN
+
+  # A successful payment was made, but a balance is still owed
+  PARTIAL_PAYMENT
+
+  # The server is awaiting a response before continuing
+  PENDING
+
+  # The final refund receipt is being generated
+  PENDING_REFUND_RECEIPT
+
+  # The transaction has been submitted for authorization and is awaiting the response from the processor
+  PROCESSING
+
+  # The final receipt is being generated
+  RECEIPT_PENDING
+
+  # The transaction has been initiated, but the token has not been scanned
+  START
+
+  # The checkout token timed ou
+  UNCLAIMED
+
+  # Status not yet defined
+  UNKNOWN
+
+  # A void has been requested and the server is awaiting the response from the processor
+  VOID_PENDING
+
+  # A void has been requested and the server is awaiting the response from the processo
+  VOID_TRANSACTION
+}
+
+# Current fuel pump action
+enum FUEL_PUMP_STATUS {
+  # The fuel transaction has been canceled.
+  FUEL_CANCELED
+
+  # The pump has completed dispensing fuel
+  FUEL_END
+
+  # The pump has requested a pre-authorization charge from the processor and is awaiting approval before dispersing fuel.
+  FUEL_PRE_AUTH_SUBMITTED
+
+  # The fuel pump is ready to dispense fuel
+  FUEL_PUMP_ACTIVATED
+
+  # The pump is been locked and is not available for fueling
+  FUEL_PUMP_DEACTIVATED
+
+  # The completed transaction details have been returned to the pump
+  FUEL_RECEIPT_RECEIVED
+
+  # The pre-authorization confirmation access code has been correctly entered into the pump
+  FUEL_SECONDARY_ID_RECEIVED
+
+  # The pump has begun dispensing fuel
+  FUEL_START
+
+  # Action not yet defined
+  UNKNOWN
+}

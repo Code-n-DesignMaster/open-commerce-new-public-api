@@ -1,0 +1,806 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CustomerGraphqlClientService clientPaymentToken should match snapshot: for operation 1`] = `
+"query clientPaymentToken($customerID: ID) {
+ clientPaymentToken(customerID: $customerID) {
+  token
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService clientPaymentToken should match snapshot: for parameters 1`] = `
+Object {
+  "customerID": "testCustomerId",
+}
+`;
+
+exports[`CustomerGraphqlClientService currentCustomerByUsername with resolve info should match snapshot: for operation 1`] = `
+"query customerByUsername($username: String!) {
+ customerByUsername(username: $username) {
+  pageInfo {
+   hasNextPage
+   hasPreviousPage
+  }
+  edges {
+   cursor
+   node {
+    checkNumber
+    uuid
+    startedAt
+    lastUpdatedAt
+    completedAt
+    additionalReceiptData
+    amount {
+     displayPrice
+     price
+    }
+    items {
+     itemType
+     itemDescription
+     qty
+     amount {
+      price
+      displayPrice
+     }
+    }
+    paymentProviderTransactionId
+    tax {
+     price
+     displayPrice
+    }
+    paymentInfo {
+     cardPANPrint
+     cardType
+     hostAuthNumber
+    }
+    powercard {
+     uuid
+     isPhysical
+     cardNumber
+     status
+     cardType
+     cardAlias
+     imagePack {
+      uuid
+      fullsizeImages {
+       url
+       width
+       height
+      }
+      thumbnailImages {
+       url
+       width
+       height
+      }
+      name
+     }
+     gameChips
+     videoChips
+     rewardChips
+     attractionChips
+     tickets
+     rewardPoints
+     pointsToNextReward
+     isRegisteredReward
+     easyRechargeEnabled
+     walletPass {
+      pkPassUrl
+      googlePayUrl
+     }
+    }
+    purchaseType
+   }
+  }
+  id
+  uuid
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService currentCustomerByUsername with resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "username": "testUsername",
+}
+`;
+
+exports[`CustomerGraphqlClientService currentCustomerByUsername without resolve info should match snapshot: for operation 1`] = `
+"query customerByUsername($username: String!) {
+ customerByUsername(username: $username) {
+
+  id
+  uuid
+  isNewCustomer
+  email
+  status
+  username
+
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService currentCustomerByUsername without resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "username": "testUsername",
+}
+`;
+
+exports[`CustomerGraphqlClientService customerByIdentityProviderId with resolve info should match snapshot: for operation 1`] = `
+"query customerByIdentityProviderId($identityProviderId: ID!) {
+ customerByIdentityProviderId(identityProviderId: $identityProviderId) {
+  pageInfo {
+   hasNextPage
+   hasPreviousPage
+  }
+  edges {
+   cursor
+   node {
+    checkNumber
+    uuid
+    startedAt
+    lastUpdatedAt
+    completedAt
+    additionalReceiptData
+    amount {
+     displayPrice
+     price
+    }
+    items {
+     itemType
+     itemDescription
+     qty
+     amount {
+      price
+      displayPrice
+     }
+    }
+    paymentProviderTransactionId
+    tax {
+     price
+     displayPrice
+    }
+    paymentInfo {
+     cardPANPrint
+     cardType
+     hostAuthNumber
+    }
+    powercard {
+     uuid
+     isPhysical
+     cardNumber
+     status
+     cardType
+     cardAlias
+     imagePack {
+      uuid
+      fullsizeImages {
+       url
+       width
+       height
+      }
+      thumbnailImages {
+       url
+       width
+       height
+      }
+      name
+     }
+     gameChips
+     videoChips
+     rewardChips
+     attractionChips
+     tickets
+     rewardPoints
+     pointsToNextReward
+     isRegisteredReward
+     easyRechargeEnabled
+     walletPass {
+      pkPassUrl
+      googlePayUrl
+     }
+    }
+    purchaseType
+   }
+  }
+  id
+  uuid
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerByIdentityProviderId with resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "identityProviderId": "testIdentityProviderId",
+}
+`;
+
+exports[`CustomerGraphqlClientService customerByIdentityProviderId without resolve info should match snapshot: for operation 1`] = `
+"query customerByIdentityProviderId($identityProviderId: ID!) {
+ customerByIdentityProviderId(identityProviderId: $identityProviderId) {
+
+  id
+  uuid
+  isNewCustomer
+  email
+  status
+  username
+
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerByIdentityProviderId without resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "identityProviderId": "testIdentityProviderId",
+}
+`;
+
+exports[`CustomerGraphqlClientService customerCreate with resolve info should match snapshot: for operation 1`] = `
+"mutation customerCreate($input: CustomerCreate!) {
+ customerCreate(input: $input) {
+  pageInfo {
+   hasNextPage
+   hasPreviousPage
+  }
+  edges {
+   cursor
+   node {
+    checkNumber
+    uuid
+    startedAt
+    lastUpdatedAt
+    completedAt
+    additionalReceiptData
+    amount {
+     displayPrice
+     price
+    }
+    items {
+     itemType
+     itemDescription
+     qty
+     amount {
+      price
+      displayPrice
+     }
+    }
+    paymentProviderTransactionId
+    tax {
+     price
+     displayPrice
+    }
+    paymentInfo {
+     cardPANPrint
+     cardType
+     hostAuthNumber
+    }
+    powercard {
+     uuid
+     isPhysical
+     cardNumber
+     status
+     cardType
+     cardAlias
+     imagePack {
+      uuid
+      fullsizeImages {
+       url
+       width
+       height
+      }
+      thumbnailImages {
+       url
+       width
+       height
+      }
+      name
+     }
+     gameChips
+     videoChips
+     rewardChips
+     attractionChips
+     tickets
+     rewardPoints
+     pointsToNextReward
+     isRegisteredReward
+     easyRechargeEnabled
+     walletPass {
+      pkPassUrl
+      googlePayUrl
+     }
+    }
+    purchaseType
+   }
+  }
+  id
+  uuid
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerCreate with resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "demographics": Object {
+      "birthday": "1977-12-14",
+    },
+    "email": "tetsuo000+2222222222420@gmail.com",
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerCreate without resolve info should match snapshot: for operation 1`] = `
+"mutation customerCreate($input: CustomerCreate!) {
+ customerCreate(input: $input) {
+
+  id
+  uuid
+  isNewCustomer
+  email
+  status
+  username
+
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerCreate without resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "demographics": Object {
+      "birthday": "1977-12-14",
+    },
+    "email": "tetsuo000+2222222222420@gmail.com",
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerDelete should match snapshot: for operation 1`] = `
+"mutation customerDelete($customerUuid: ID!) {
+ customerDelete(customerUuid: $customerUuid)
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerDelete should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+}
+`;
+
+exports[`CustomerGraphqlClientService customerEmailVerificationSend should match snapshot: for operation 1`] = `
+"mutation customerEmailVerificationSend($customerUuid: ID!) {
+ customerEmailVerificationSend(customerUuid: $customerUuid)
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerEmailVerificationSend should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+}
+`;
+
+exports[`CustomerGraphqlClientService customerPaymentInstrumentCreate should match snapshot: for operation 1`] = `
+"mutation customerPaymentInstrumentCreate($customerUuid: ID!, $input: CustomerPaymentInstrumentCreate!) {
+ customerPaymentInstrumentCreate(customerUuid: $customerUuid, input: $input) {
+  uuid
+  alias
+  providerNickName
+  accountNumber
+  address {
+   alias
+   street1
+   street2
+   city
+   state
+   zipCode
+   geoLocation {
+    latitude
+    longitude
+   }
+  }
+  paymentType
+  expiration {
+   expirationYear
+   expirationMonth
+  }
+  status
+  isDefault
+  displayNumber
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerPaymentInstrumentCreate should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "input": Object {
+    "alias": "testAlias",
+    "nonce": "testNonce",
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerPaymentInstrumentDelete should match snapshot: for operation 1`] = `
+"mutation customerPaymentInstrumentDelete($customerUuid: ID!, $uuid: ID!) {
+ customerPaymentInstrumentDelete(customerUuid: $customerUuid, uuid: $uuid) {
+  uuid
+  alias
+  providerNickName
+  accountNumber
+  address {
+   alias
+   street1
+   street2
+   city
+   state
+   zipCode
+   geoLocation {
+    latitude
+    longitude
+   }
+  }
+  paymentType
+  expiration {
+   expirationYear
+   expirationMonth
+  }
+  status
+  isDefault
+  displayNumber
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerPaymentInstrumentDelete should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "uuid": "testUuid",
+}
+`;
+
+exports[`CustomerGraphqlClientService customerPaymentInstrumentUpdate should match snapshot: for operation 1`] = `
+"mutation customerPaymentInstrumentUpdate($input: CustomerPaymentInstrumentUpdate!) {
+ customerPaymentInstrumentUpdate(input: $input) {
+  uuid
+  alias
+  providerNickName
+  accountNumber
+  address {
+   alias
+   street1
+   street2
+   city
+   state
+   zipCode
+   geoLocation {
+    latitude
+    longitude
+   }
+  }
+  paymentType
+  expiration {
+   expirationYear
+   expirationMonth
+  }
+  status
+  isDefault
+  displayNumber
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerPaymentInstrumentUpdate should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "alias": "testAlias",
+    "nonce": "testNonce",
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeChange should match snapshot: for operation 1`] = `
+"mutation customerPinCodeChange($customerUuid: ID!, $input: CustomerPinCodeChange!) {
+ customerPinCodeChange(customerUuid: $customerUuid, input: $input)
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeChange should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "input": Object {
+    "newPinCode": Object {
+      "pinCode": "4321",
+    },
+    "oldPinCode": Object {
+      "pinCode": "1112",
+    },
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeReset should match snapshot: for operation 1`] = `
+"mutation customerPinCodeReset($customerUuid: ID!) {
+ customerPinCodeReset(customerUuid: $customerUuid)
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeReset should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+}
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeSet should match snapshot: for operation 1`] = `
+"mutation customerPinCodeSet($customerUuid: ID!, $input: CustomerPinCodeSet!) {
+ customerPinCodeSet(customerUuid: $customerUuid, input: $input)
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeSet should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "input": Object {
+    "pinCode": Object {
+      "pinCode": "testPinCode",
+    },
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeVerify should match snapshot: for operation 1`] = `
+"mutation customerPinCodeVerify($customerUuid: ID!, $input: CustomerPinCodeVerify!) {
+ customerPinCodeVerify(customerUuid: $customerUuid, input: $input)
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerPinCodeVerify should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "input": Object {
+    "pinCode": Object {
+      "pinCode": "testPinCode",
+    },
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerRegistrationComplete should match snapshot: for operation 1`] = `
+"mutation customerRegistrationComplete($customerUuid: ID!, $input: CustomerRegistrationComplete!) {
+ customerRegistrationComplete(customerUuid: $customerUuid, input: $input) {
+  pageInfo {
+   hasNextPage
+   hasPreviousPage
+  }
+  edges {
+   cursor
+   node {
+    checkNumber
+    uuid
+    startedAt
+    lastUpdatedAt
+    completedAt
+    additionalReceiptData
+    amount {
+     displayPrice
+     price
+    }
+    items {
+     itemType
+     itemDescription
+     qty
+     amount {
+      price
+      displayPrice
+     }
+    }
+    paymentProviderTransactionId
+    tax {
+     price
+     displayPrice
+    }
+    paymentInfo {
+     cardPANPrint
+     cardType
+     hostAuthNumber
+    }
+    powercard {
+     uuid
+     isPhysical
+     cardNumber
+     status
+     cardType
+     cardAlias
+     imagePack {
+      uuid
+      fullsizeImages {
+       url
+       width
+       height
+      }
+      thumbnailImages {
+       url
+       width
+       height
+      }
+      name
+     }
+     gameChips
+     videoChips
+     rewardChips
+     attractionChips
+     tickets
+     rewardPoints
+     pointsToNextReward
+     isRegisteredReward
+     easyRechargeEnabled
+     walletPass {
+      pkPassUrl
+      googlePayUrl
+     }
+    }
+    purchaseType
+   }
+  }
+  id
+  uuid
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerRegistrationComplete should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "input": Object {
+    "acceptAgreement": Array [
+      "testTermsAndConditionsAgreementUuid",
+      "testPrivacyAgreementUuid",
+    ],
+    "defaultLocationId": 5,
+    "demographics": Object {
+      "birthday": "1977-12-14",
+      "customDemographics": Object {},
+      "gender": "m",
+      "zipCode": "12345",
+    },
+    "email": "ryan.oboril@stuzo.com",
+    "name": Object {
+      "first": "Ryan",
+      "last": "Test",
+      "middle": "H",
+      "suffix": "TheFirst",
+      "title": "Sir",
+    },
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerServiceConfig should match snapshot: for operation 1`] = `
+"query customerServiceConfig {
+ customerServiceConfig {
+  maxAllowedPaymentCards
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerServiceConfig should match snapshot: for parameters 1`] = `undefined`;
+
+exports[`CustomerGraphqlClientService customerUpdate with resolve info should match snapshot: for operation 1`] = `
+"mutation customerUpdate($customerUuid: ID!, $input: CustomerUpdate!) {
+ customerUpdate(customerUuid: $customerUuid, input: $input) {
+  pageInfo {
+   hasNextPage
+   hasPreviousPage
+  }
+  edges {
+   cursor
+   node {
+    checkNumber
+    uuid
+    startedAt
+    lastUpdatedAt
+    completedAt
+    additionalReceiptData
+    amount {
+     displayPrice
+     price
+    }
+    items {
+     itemType
+     itemDescription
+     qty
+     amount {
+      price
+      displayPrice
+     }
+    }
+    paymentProviderTransactionId
+    tax {
+     price
+     displayPrice
+    }
+    paymentInfo {
+     cardPANPrint
+     cardType
+     hostAuthNumber
+    }
+    powercard {
+     uuid
+     isPhysical
+     cardNumber
+     status
+     cardType
+     cardAlias
+     imagePack {
+      uuid
+      fullsizeImages {
+       url
+       width
+       height
+      }
+      thumbnailImages {
+       url
+       width
+       height
+      }
+      name
+     }
+     gameChips
+     videoChips
+     rewardChips
+     attractionChips
+     tickets
+     rewardPoints
+     pointsToNextReward
+     isRegisteredReward
+     easyRechargeEnabled
+     walletPass {
+      pkPassUrl
+      googlePayUrl
+     }
+    }
+    purchaseType
+   }
+  }
+  id
+  uuid
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerUpdate with resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "input": Object {
+    "demographics": Object {
+      "birthday": "1977-12-14",
+    },
+    "email": "tetsuo000+2222222222420@gmail.com",
+  },
+}
+`;
+
+exports[`CustomerGraphqlClientService customerUpdate without resolve info should match snapshot: for operation 1`] = `
+"mutation customerUpdate($customerUuid: ID!, $input: CustomerUpdate!) {
+ customerUpdate(customerUuid: $customerUuid, input: $input) {
+
+  id
+  uuid
+  isNewCustomer
+  email
+  status
+  username
+
+ }
+}"
+`;
+
+exports[`CustomerGraphqlClientService customerUpdate without resolve info should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "input": Object {
+    "demographics": Object {
+      "birthday": "1977-12-14",
+    },
+    "email": "tetsuo000+2222222222420@gmail.com",
+  },
+}
+`;

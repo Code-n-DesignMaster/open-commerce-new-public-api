@@ -1,0 +1,7 @@
+extend type Query {
+  triggerException(input: TriggerException): Boolean
+}
+
+input TriggerException {
+  message: String
+}

@@ -1,0 +1,61 @@
+input PinCodeInputType {
+  pinCode: String!
+}
+
+input ChangePinCodeInputType {
+  oldPinCode: String!
+  newPinCode: String!
+}
+
+extend type Mutation {
+  # Set the initial pin code
+  customerPinCodeSet(
+    # Initial pin code
+    input: CustomerPinCodeSet!
+  ): Boolean
+
+  # Change customer's pin code to a provided new one
+  customerPinCodeChange(
+    # Old pin code and new pin code
+    input: CustomerPinCodeChange!
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): Boolean
+
+  # Compare provided pin code against expected
+  customerPinCodeVerify(
+    # The entered pin code to compare
+    input: CustomerPinCodeVerify!
+  ): Boolean
+
+  # Reset the customer's current pin code
+  customerPinCodeReset: Boolean
+}
+
+
+# New pin code details
+input CustomerPinCodeSet {
+  # Customer's new pin code
+  pinCode: CustomerPinCode!
+}
+
+# Details required to update a Customer's pin code
+input CustomerPinCodeChange {
+  # Customer's old pin code
+  oldPinCode: CustomerPinCode!
+
+  # Customer's new pin code
+  newPinCode: CustomerPinCode!
+}
+
+# A customer's pin code
+input CustomerPinCode {
+  # The pin code
+  pinCode: String!
+}
+
+# Customer pin code to verify
+input CustomerPinCodeVerify {
+  # Customer's pin code
+  pinCode: CustomerPinCode!
+}

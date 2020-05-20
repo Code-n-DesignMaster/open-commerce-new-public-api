@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MobilePassGraphqlClientService getWalletPassUrls should match snapshot: for operation 1`] = `
+"query walletPass($powercardUuid: ID!, $deviceId: ID!) {
+ walletPass(powercardUuid: $powercardUuid, deviceId: $deviceId) {
+
+  googlePayUrl
+  pkPassUrl
+ }
+}"
+`;
+
+exports[`MobilePassGraphqlClientService getWalletPassUrls should match snapshot: for parameters 1`] = `
+Object {
+  "deviceId": "testDeviceId",
+  "powercardUuid": "testPowercardUuid",
+}
+`;
+
+exports[`MobilePassGraphqlClientService isPowercardInGoogleWallet should match snapshot: for operation 1`] = `
+"query isPowercardInGoogleWallet($powercardUuid: ID!, $deviceId: ID!) {
+ isPowercardInGoogleWallet(powercardUuid: $powercardUuid, deviceId: $deviceId)
+}"
+`;
+
+exports[`MobilePassGraphqlClientService isPowercardInGoogleWallet should match snapshot: for parameters 1`] = `
+Object {
+  "deviceId": "testDeviceId",
+  "powercardUuid": "testPowercardUuid",
+}
+`;

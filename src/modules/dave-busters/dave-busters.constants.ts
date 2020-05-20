@@ -1,0 +1,5 @@
+export const API_URL_TOKEN = 'API_URL';
+export const DAVE_AND_BUSTERS_SERVICE_TOKEN = 'DAVE_AND_BUSTERS_SERVICE_TOKEN';
+export const RABBITMQ_LISTENER_TOKEN = 'RABBITMQ_LISTENER_TOKEN';
+export const WALLET_PROXY_PATH = '/walletpass';
+export const CUSTOMER_PROXY_PATH = '/customer';

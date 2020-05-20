@@ -1,0 +1,1149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DaveAndBustersGraphqlClientService adminFeatureEnableForStore should match snapshot: for operation 1`] = `
+"mutation adminFeatureEnableForStore($name: DAVE_AND_BUSTERS_FEATURE!, $enabled: Boolean!, $storeId: Int) {
+ adminFeatureEnableForStore(name: $name, enabled: $enabled, storeId: $storeId)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService adminFeatureEnableForStore should match snapshot: for parameters 1`] = `
+Object {
+  "enabled": true,
+  "name": "testFeatureName",
+  "storeId": 42,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService adminFeatures should match snapshot: for operation 1`] = `
+"query adminFeatures {
+ adminFeatures {
+  features {
+   name
+   description
+   enabledStoreIds
+  }
+  locations {
+   brandSpecificLocationId
+   address {
+    alias
+    street1
+    street2
+    city
+    state
+    zipCode
+   }
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService adminFeatures should match snapshot: for parameters 1`] = `undefined`;
+
+exports[`DaveAndBustersGraphqlClientService adminIsFeatureEnabled should match snapshot: for operation 1`] = `
+"query adminIsFeatureEnabled($name: DAVE_AND_BUSTERS_FEATURE!, $storeId: Int!) {
+ adminIsFeatureEnabled(name: $name, storeId: $storeId)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService adminIsFeatureEnabled should match snapshot: for parameters 1`] = `
+Object {
+  "name": "testFeatureName",
+  "storeId": 42,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService adminIsFeatureEnabledForLatAndLong should match snapshot: for operation 1`] = `
+"query adminIsFeatureEnabledForLatAndLong($name: DAVE_AND_BUSTERS_FEATURE!, $geoLocation: GeoLocationCreate) {
+ adminIsFeatureEnabledForLatAndLong(name: $name, geoLocation: $geoLocation) {
+  isEnabled
+  storeId
+  distance
+  address {
+   street1
+   street2
+   city
+   state
+   zipCode
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService adminIsFeatureEnabledForLatAndLong should match snapshot: for parameters 1`] = `
+Object {
+  "geoLocation": Object {
+    "latitude": 0,
+    "longitude": 1,
+  },
+  "name": "testFeatureName",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService brand should match snapshot: for operation 1`] = `
+"query brand {
+ brand {
+
+  agreements {
+   url
+   name
+   activeAt
+   uuid
+  }
+  preferences {
+   uuid
+   name
+   description
+  }
+  supportedPaymentTypes
+  supportedApplePayPaymentTypes
+  supportedGoogleWalletPaymentTypes
+  backgroundImage {
+   images {
+    url
+    width
+    height
+   }
+   activeAt
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService brand should match snapshot: for parameters 1`] = `undefined`;
+
+exports[`DaveAndBustersGraphqlClientService check should match snapshot: for operation 1`] = `
+"query check($storeId: Int!, $payCode: ID!) {
+ check(storeId: $storeId, payCode: $payCode) {
+  checkOpenTime
+  other
+  payCode
+  payment
+  storeId
+  subTotal
+  tax
+  total
+  rewardPoints
+  lineItems {
+   amount
+   description
+   itemType
+   lineNumber
+   quantity
+   seat
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService check should match snapshot: for parameters 1`] = `
+Object {
+  "payCode": "testPayCode",
+  "storeId": 42,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService checkList should match snapshot: for operation 1`] = `
+"query checkList($tableUuid: ID!) {
+ checkList(tableUuid: $tableUuid) {
+  checkOpenTime
+  other
+  payCode
+  payment
+  storeId
+  subTotal
+  tax
+  total
+  rewardPoints
+  lineItems {
+   amount
+   description
+   itemType
+   lineNumber
+   quantity
+   seat
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService checkList should match snapshot: for parameters 1`] = `
+Object {
+  "tableUuid": "testTableUuid",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService checkPaymentApply should match snapshot: for operation 1`] = `
+"mutation checkPaymentApply($input: CheckPaymentApplyInput!) {
+ checkPaymentApply(input: $input) {
+  checkOpenTime
+  other
+  payCode
+  payment
+  storeId
+  subTotal
+  tax
+  total
+  rewardPoints
+  lineItems {
+   amount
+   description
+   itemType
+   lineNumber
+   quantity
+   seat
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService checkPaymentApply should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "billing": Object {
+      "zipCode": "12345",
+    },
+    "customerUuid": "testCustomerUuid",
+    "dollarsPaid": 12,
+    "emailAddress": "testEmail@address.com",
+    "nonce": "testNonce",
+    "payCode": "testPayCode",
+    "paymentInstrumentType": "VISA",
+    "paymentInstrumentUuid": "testPaymentInstrumentUuid",
+    "storeId": 42,
+    "tax": 1.23,
+    "tip": 4.56,
+  },
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService customerPowercardWalletGet should match snapshot: for operation 1`] = `
+"query powercards($customerUuid: ID!) {
+ powercards(customerUuid: $customerUuid) {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService customerPowercardWalletGet should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService getRateCardByPowerCardUuid should match snapshot: for operation 1`] = `
+"query getRateCardByPowerCardUuid($powerCardUuid: ID!, $isNewCustomer: Boolean!, $paymentType: OFFER_PAYMENT_TYPE) {
+ getRateCardByPowerCardUuid(powerCardUuid: $powerCardUuid, isNewCustomer: $isNewCustomer, paymentType: $paymentType) {
+  rateCardHeadingText
+  offerHeadingText
+  offerCheckoutItemText
+  offerCheckoutSubHeadingText
+  offerRateCardSubHeadingText
+  discountPercentage
+  isNewCustomer
+  attractionPrice
+  activationFee
+  activationItem {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  attractionItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  categoryList {
+   categoryId
+   label
+   sequence
+   color
+  }
+  menuItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  upSellItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService getRateCardByPowerCardUuid should match snapshot: for parameters 1`] = `
+Object {
+  "isNewCustomer": true,
+  "paymentType": "GOOGLE_PAY",
+  "powerCardUuid": "testPowercardUuid",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService getRateCards should match snapshot: for operation 1`] = `
+"query getRateCards($input: RateCardFilter) {
+ getRateCards(input: $input) {
+  rateCardHeadingText
+  offerHeadingText
+  offerCheckoutItemText
+  offerCheckoutSubHeadingText
+  offerRateCardSubHeadingText
+  discountPercentage
+  isNewCustomer
+  attractionPrice
+  activationFee
+  activationItem {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  attractionItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  categoryList {
+   categoryId
+   label
+   sequence
+   color
+  }
+  menuItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  upSellItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService getRateCards should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "epicenter": null,
+    "isNewCustomer": true,
+    "paymentType": "NONE",
+    "radius": null,
+    "simpleClosest": false,
+    "storeId": 5,
+  },
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService locations should match snapshot: for operation 1`] = `
+"query locations($filter: LocationFilter) {
+ locations(filter: $filter) {
+  rateCardHeadingText
+  offerHeadingText
+  offerCheckoutItemText
+  offerCheckoutSubHeadingText
+  offerRateCardSubHeadingText
+  discountPercentage
+  isNewCustomer
+  attractionPrice
+  activationFee
+  activationItem {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  attractionItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  categoryList {
+   categoryId
+   label
+   sequence
+   color
+  }
+  menuItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  upSellItemList {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService locations should match snapshot: for parameters 1`] = `
+Object {
+  "filter": null,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService offerList should match snapshot: for operation 1`] = `
+"query offerList($input: PowercardOfferList!) {
+ offerList(input: $input) {
+  activationFee
+  activationItem {
+   itemId
+   categoryId
+   chips
+   price
+   originalPrice
+   sequence
+   isBestValue
+   upSellId
+   color
+  }
+  offerList {
+   offerId
+   offerTypes
+   title
+   description
+   offerAmount
+   imageUrl
+   validFrom
+   validTo
+   disclaimer
+   termsAndConditions
+   autoApply
+   item {
+    itemId
+    categoryId
+    chips
+    price
+    originalPrice
+    sequence
+    isBestValue
+    upSellId
+    color
+   }
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService offerList should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "emailAddress": "testEmailAddress",
+    "epicenter": null,
+    "isNewCustomer": false,
+    "paymentType": "NONE",
+    "radius": null,
+    "simpleClosest": false,
+    "storeId": 42,
+  },
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardConfig should match snapshot: for operation 1`] = `
+"query powercards($customerUuid: ID!) {
+ powercards(customerUuid: $customerUuid) {
+
+  uuid
+  easyRechargeEnabled
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardConfig should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardConfigSet should match snapshot: for operation 1`] = `
+"mutation powercardConfigSet($config: [PowercardConfigItemInput]) {
+ powercardConfigSet(config: $config) {
+
+  powercardUuid
+  easyRechargeEnabled
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardConfigSet should match snapshot: for parameters 1`] = `
+Object {
+  "config": Array [
+    Object {
+      "easyRechargeEnabled": true,
+      "powercardUuid": "testPowercardUuid",
+    },
+  ],
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardCreate should match snapshot: for operation 1`] = `
+"mutation powercardCreate($input: PowercardCreate!) {
+ powercardCreate(input: $input) {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+  customerUuid
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardCreate should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "alias": "testAlias",
+    "cardEncoding": "testCardEncoding",
+    "cardNumber": "testCardNumber",
+    "customerUuid": "testCustomerUuid",
+    "easyRechargeEnabled": true,
+    "imagePackUuid": null,
+    "pin": 1234,
+    "rfidData": "testRfidData",
+  },
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardDelete should match snapshot: for operation 1`] = `
+"mutation powercardDelete($powercardId: ID!) {
+ powercardDelete(powercardId: $powercardId) {
+
+  status
+  success
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardDelete should match snapshot: for parameters 1`] = `
+Object {
+  "powercardId": "testPowercardId",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardDisable should match snapshot: for operation 1`] = `
+"mutation powercardDisable($id: ID!, $reason: POWERCARD_STATUS_TYPE) {
+ powercardDisable(id: $id, reason: $reason) {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardDisable should match snapshot: for parameters 1`] = `
+Object {
+  "id": "testPowercardUuid",
+  "reason": "DISABLED",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardEnable should match snapshot: for operation 1`] = `
+"mutation powercardEnable($id: ID!) {
+ powercardEnable(id: $id) {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardEnable should match snapshot: for parameters 1`] = `
+Object {
+  "id": "testPowercardUuid",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardFundsAdd should match snapshot: for operation 1`] = `
+"mutation powercardFundsAdd($input: PowercardFundsAdd!) {
+ powercardFundsAdd(input: $input) {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardFundsAdd should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "billing": Object {
+      "zipCode": "12345",
+    },
+    "country": "USA",
+    "customerUuid": "testCustomerUuid",
+    "displayName": "testDisplayName",
+    "dollarsPaid": 12,
+    "easyRechargeEnabled": true,
+    "emailAddress": "testEmail@address.com",
+    "isNewCustomer": true,
+    "networkName": "testNetworkName",
+    "nonce": "testNonce",
+    "offerId": 12,
+    "paymentInstrumentType": "VISA",
+    "paymentInstrumentUuid": "testPaymentInstrumentUuid",
+    "rateCardItemIds": Array [
+      1,
+    ],
+    "storeId": 5,
+    "uuid": "testPowercardUuid",
+  },
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardImages should match snapshot: for operation 1`] = `
+"query powercardImages {
+ powercardImages {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardImages should match snapshot: for parameters 1`] = `undefined`;
+
+exports[`DaveAndBustersGraphqlClientService powercardUpdate should match snapshot: for operation 1`] = `
+"mutation powercardUpdate($powercardId: ID!, $customerEmail: OCEmailAddress, $attributes: PowercardAttributesUpdate!) {
+ powercardUpdate(powercardId: $powercardId, customerEmail: $customerEmail, attributes: $attributes) {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardUpdate should match snapshot: for parameters 1`] = `
+Object {
+  "attributes": Object {
+    "alias": "testAliasUpdate",
+    "easyRechargeEnabled": false,
+    "imagePackUuid": null,
+    "isRegisteredReward": true,
+  },
+  "customerEmail": "testCustomerEmail",
+  "powercardId": "testPowercardId",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardVirtualPurchaseCreate should match snapshot: for operation 1`] = `
+"mutation powercardVirtualPurchaseCreate($input: VirtualPowercardCreate!) {
+ powercardVirtualPurchaseCreate(input: $input) {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService powercardVirtualPurchaseCreate should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "alias": "testAlias",
+    "billing": Object {
+      "zipCode": "12345",
+    },
+    "country": "USA",
+    "customerUuid": "testCustomerUuid",
+    "displayName": "testDisplayName",
+    "dollarsPaid": 12,
+    "easyRechargeEnabled": true,
+    "emailAddress": "testEmail@address.com",
+    "imagePackUuid": null,
+    "isNewCustomer": true,
+    "networkName": "testNetworkName",
+    "nonce": "testNonce",
+    "offerId": 12,
+    "paymentInstrumentType": "VISA",
+    "paymentInstrumentUuid": "testPaymentInstrumentUuid",
+    "rateCardItemIds": Array [
+      1,
+    ],
+    "storeId": 5,
+  },
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService promoImages should match snapshot: for operation 1`] = `
+"query promoImages {
+ promoImages {
+  uuid
+  isPhysical
+  cardNumber
+  status
+  cardType
+  cardAlias
+  imagePack {
+   uuid
+   name
+   fullsizeImages {
+    url
+    width
+    height
+   }
+   thumbnailImages {
+    url
+    width
+    height
+   }
+  }
+  gameChips
+  videoChips
+  rewardChips
+  attractionChips
+  tickets
+  rewardPoints
+  pointsToNextReward
+  isRegisteredReward
+  easyRechargeEnabled
+  walletPass {
+   pkPassUrl
+   googlePayUrl
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService promoImages should match snapshot: for parameters 1`] = `undefined`;
+
+exports[`DaveAndBustersGraphqlClientService ratingCreate should match snapshot: for operation 1`] = `
+"mutation ratingCreate($transactionUuid: ID!, $numberOfStars: Float!) {
+ ratingCreate(transactionUuid: $transactionUuid, numberOfStars: $numberOfStars)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService ratingCreate should match snapshot: for parameters 1`] = `
+Object {
+  "numberOfStars": 4,
+  "transactionUuid": "testUuid",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService receiptEmail should match snapshot: for operation 1`] = `
+"mutation receiptEmail($emailAddress: String!, $storeId: Int!, $payCode: ID!) {
+ receiptEmail(emailAddress: $emailAddress, storeId: $storeId, payCode: $payCode)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService receiptEmail should match snapshot: for parameters 1`] = `
+Object {
+  "emailAddress": "testEmail",
+  "payCode": "testPayCode",
+  "storeId": 1234,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService receiptsClear should match snapshot: for operation 1`] = `
+"mutation receiptsClear($storeId: Int!, $payCode: ID!) {
+ receiptsClear(storeId: $storeId, payCode: $payCode)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService receiptsClear should match snapshot: for parameters 1`] = `
+Object {
+  "payCode": "testPayCode",
+  "storeId": 5,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService rewardHistory should match snapshot: for operation 1`] = `
+"query rewardHistory($emailAddress: OCEmailAddress!, $lastPage: Int) {
+ rewardHistory(emailAddress: $emailAddress, lastPage: $lastPage) {
+  rewardPoints
+  pointsToNextReward
+  eligibleRewardCount
+  transactions {
+   transactionType
+   transactionDate
+   numberOfChips
+   numberOfPoints
+   chipBalance
+   expirationDate
+  }
+ }
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService rewardHistory should match snapshot: for parameters 1`] = `
+Object {
+  "emailAddress": "testEmail@address.com",
+  "lastPage": 0,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerCheckUpdate should match snapshot: for operation 1`] = `
+"query triggerCheckUpdate($storeId: Int!, $payCode: ID!) {
+ triggerCheckUpdate(storeId: $storeId, payCode: $payCode)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerCheckUpdate should match snapshot: for parameters 1`] = `
+Object {
+  "payCode": "testPayCode",
+  "storeId": 1234,
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerEasyRechargeNotificationForPowercard should match snapshot: for operation 1`] = `
+"query triggerEasyRechargeNotificationForPowercard($customerUuid: ID!, $powercardUuid: ID!) {
+ triggerEasyRechargeNotificationForPowercard(customerUuid: $customerUuid, powercardUuid: $powercardUuid)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerEasyRechargeNotificationForPowercard should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "powercardUuid": "testPowercardUuid",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerFastEasyRechargeNotificationForPowercard should match snapshot: for operation 1`] = `
+"query triggerFastEasyRechargeNotificationForPowercard($customerUuid: ID!, $powercardUuid: ID!, $rateCardItemId: String) {
+ triggerFastEasyRechargeNotificationForPowercard(customerUuid: $customerUuid, powercardUuid: $powercardUuid, rateCardItemId: $rateCardItemId)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerFastEasyRechargeNotificationForPowercard should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "powercardUuid": "testPowercardUuid",
+  "rateCardItemId": "testRateCardItemId",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerPowercardBalanceUpdateMessage should match snapshot: for operation 1`] = `
+"query triggerPowercardBalanceUpdateMessage($cardNumber: String!, $gameChips: String!) {
+ triggerPowercardBalanceUpdateMessage(cardNumber: $cardNumber, gameChips: $gameChips)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerPowercardBalanceUpdateMessage should match snapshot: for parameters 1`] = `
+Object {
+  "cardNumber": "testCardNumber",
+  "gameChips": "testGameChips",
+}
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerTableUpdate should match snapshot: for operation 1`] = `
+"query triggerTableUpdate($tableUuid: ID!) {
+ triggerTableUpdate(tableUuid: $tableUuid)
+}"
+`;
+
+exports[`DaveAndBustersGraphqlClientService triggerTableUpdate should match snapshot: for parameters 1`] = `
+Object {
+  "tableUuid": "testTableUuid",
+}
+`;

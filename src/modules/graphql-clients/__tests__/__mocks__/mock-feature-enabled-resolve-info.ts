@@ -1,0 +1,880 @@
+const data = {
+  fieldName: 'adminIsFeatureEnabledForLatAndLong',
+  fieldNodes: [
+    {
+      kind: 'Field',
+      name: {
+        kind: 'Name',
+        value: 'adminIsFeatureEnabledForLatAndLong',
+        loc: {
+          start: 10,
+          end: 44,
+        },
+      },
+      arguments: [
+        {
+          kind: 'Argument',
+          name: {
+            kind: 'Name',
+            value: 'name',
+            loc: {
+              start: 45,
+              end: 49,
+            },
+          },
+          value: {
+            kind: 'EnumValue',
+            value: 'PAY_AT_TABLE',
+            loc: {
+              start: 51,
+              end: 63,
+            },
+          },
+          loc: {
+            start: 45,
+            end: 63,
+          },
+        },
+        {
+          kind: 'Argument',
+          name: {
+            kind: 'Name',
+            value: 'geoLocation',
+            loc: {
+              start: 65,
+              end: 76,
+            },
+          },
+          value: {
+            kind: 'ObjectValue',
+            fields: [
+              {
+                kind: 'ObjectField',
+                name: {
+                  kind: 'Name',
+                  value: 'latitude',
+                  loc: {
+                    start: 97,
+                    end: 105,
+                  },
+                },
+                value: {
+                  kind: 'FloatValue',
+                  value: '39.9562149',
+                  loc: {
+                    start: 107,
+                    end: 117,
+                  },
+                },
+                loc: {
+                  start: 97,
+                  end: 117,
+                },
+              },
+              {
+                kind: 'ObjectField',
+                name: {
+                  kind: 'Name',
+                  value: 'longitude',
+                  loc: {
+                    start: 119,
+                    end: 128,
+                  },
+                },
+                value: {
+                  kind: 'FloatValue',
+                  value: '-75.13864',
+                  loc: {
+                    start: 130,
+                    end: 139,
+                  },
+                },
+                loc: {
+                  start: 119,
+                  end: 139,
+                },
+              },
+            ],
+            loc: {
+              start: 78,
+              end: 368,
+            },
+          },
+          loc: {
+            start: 65,
+            end: 368,
+          },
+        },
+      ],
+      directives: [],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {
+              kind: 'Name',
+              value: 'isEnabled',
+              loc: {
+                start: 376,
+                end: 385,
+              },
+            },
+            arguments: [],
+            directives: [],
+            loc: {
+              start: 376,
+              end: 385,
+            },
+          },
+          {
+            kind: 'Field',
+            name: {
+              kind: 'Name',
+              value: 'storeId',
+              loc: {
+                start: 390,
+                end: 397,
+              },
+            },
+            arguments: [],
+            directives: [],
+            loc: {
+              start: 390,
+              end: 397,
+            },
+          },
+          {
+            kind: 'Field',
+            name: {
+              kind: 'Name',
+              value: 'distance',
+              loc: {
+                start: 402,
+                end: 410,
+              },
+            },
+            arguments: [],
+            directives: [],
+            loc: {
+              start: 402,
+              end: 410,
+            },
+          },
+          {
+            kind: 'Field',
+            name: {
+              kind: 'Name',
+              value: 'address',
+              loc: {
+                start: 415,
+                end: 422,
+              },
+            },
+            arguments: [],
+            directives: [],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: {
+                    kind: 'Name',
+                    value: 'street1',
+                    loc: {
+                      start: 431,
+                      end: 438,
+                    },
+                  },
+                  arguments: [],
+                  directives: [],
+                  loc: {
+                    start: 431,
+                    end: 438,
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: {
+                    kind: 'Name',
+                    value: 'street2',
+                    loc: {
+                      start: 445,
+                      end: 452,
+                    },
+                  },
+                  arguments: [],
+                  directives: [],
+                  loc: {
+                    start: 445,
+                    end: 452,
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: {
+                    kind: 'Name',
+                    value: 'city',
+                    loc: {
+                      start: 459,
+                      end: 463,
+                    },
+                  },
+                  arguments: [],
+                  directives: [],
+                  loc: {
+                    start: 459,
+                    end: 463,
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: {
+                    kind: 'Name',
+                    value: 'state',
+                    loc: {
+                      start: 470,
+                      end: 475,
+                    },
+                  },
+                  arguments: [],
+                  directives: [],
+                  loc: {
+                    start: 470,
+                    end: 475,
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: {
+                    kind: 'Name',
+                    value: 'zipCode',
+                    loc: {
+                      start: 482,
+                      end: 489,
+                    },
+                  },
+                  arguments: [],
+                  directives: [],
+                  loc: {
+                    start: 482,
+                    end: 489,
+                  },
+                },
+              ],
+              loc: {
+                start: 423,
+                end: 495,
+              },
+            },
+            loc: {
+              start: 415,
+              end: 495,
+            },
+          },
+        ],
+        loc: {
+          start: 370,
+          end: 499,
+        },
+      },
+      loc: {
+        start: 10,
+        end: 499,
+      },
+    },
+  ],
+  returnType: 'FeatureEnabledResponse',
+  parentType: 'Query',
+  path: {
+    key: 'adminIsFeatureEnabledForLatAndLong',
+  },
+  schema: {
+    __validationErrors: [],
+    astNode: {
+      kind: 'SchemaDefinition',
+      directives: [],
+      operationTypes: [
+        {
+          kind: 'OperationTypeDefinition',
+          operation: 'query',
+          type: {
+            kind: 'NamedType',
+            name: {
+              kind: 'Name',
+              value: 'Query',
+            },
+          },
+        },
+        {
+          kind: 'OperationTypeDefinition',
+          operation: 'mutation',
+          type: {
+            kind: 'NamedType',
+            name: {
+              kind: 'Name',
+              value: 'Mutation',
+            },
+          },
+        },
+        {
+          kind: 'OperationTypeDefinition',
+          operation: 'subscription',
+          type: {
+            kind: 'NamedType',
+            name: {
+              kind: 'Name',
+              value: 'Subscription',
+            },
+          },
+        },
+      ],
+    },
+    __allowedLegacyNames: [],
+    _queryType: 'Query',
+    _mutationType: 'Mutation',
+    _subscriptionType: 'Subscription',
+    _directives: [
+      '@inAuthPayloadValidate',
+      '@adminOnly',
+      '@skip',
+      '@include',
+      '@deprecated',
+    ],
+    _typeMap: {
+      Query: 'Query',
+      InAuthGetSigfilesResponse: 'InAuthGetSigfilesResponse',
+      String: 'String',
+      LoggedInTest: 'LoggedInTest',
+      Boolean: 'Boolean',
+      Int: 'Int',
+      Customer: 'Customer',
+      ID: 'ID',
+      PersonName: 'PersonName',
+      OCEmailAddress: 'OCEmailAddress',
+      Address: 'Address',
+      GeoLocation: 'GeoLocation',
+      Float: 'Float',
+      PaymentInstrument: 'PaymentInstrument',
+      PAYMENT_INSTRUMENT_TYPE: 'PAYMENT_INSTRUMENT_TYPE',
+      PaymentInstrumentExpiration: 'PaymentInstrumentExpiration',
+      PAYMENT_INSTRUMENT_STATUS: 'PAYMENT_INSTRUMENT_STATUS',
+      PaymentProvider: 'PaymentProvider',
+      LoyaltyInstrument: 'LoyaltyInstrument',
+      LOYALTY_INSTRUMENT_STATUS: 'LOYALTY_INSTRUMENT_STATUS',
+      Powercard: 'Powercard',
+      POWERCARD_STATUS_TYPE: 'POWERCARD_STATUS_TYPE',
+      POWERCARD_CARD_TYPE: 'POWERCARD_CARD_TYPE',
+      PowercardImagePack: 'PowercardImagePack',
+      PowercardImage: 'PowercardImage',
+      OCURL: 'OCURL',
+      WalletPassUrl: 'WalletPassUrl',
+      Demographics: 'Demographics',
+      OCDate: 'OCDate',
+      OCJSON: 'OCJSON',
+      ContactPhoneNumber: 'ContactPhoneNumber',
+      OCPhoneNumber: 'OCPhoneNumber',
+      PHONE_TYPE: 'PHONE_TYPE',
+      CUSTOMER_STATUS: 'CUSTOMER_STATUS',
+      CustomerAgreement: 'CustomerAgreement',
+      BrandAgreement: 'BrandAgreement',
+      OCDateTime: 'OCDateTime',
+      Brand: 'Brand',
+      Tenant: 'Tenant',
+      BrandCustomerPreference: 'BrandCustomerPreference',
+      CustomerPreference: 'CustomerPreference',
+      PreferenceValue: 'PreferenceValue',
+      CustomerLoginAttemptFilter: 'CustomerLoginAttemptFilter',
+      GeoLocationFilter: 'GeoLocationFilter',
+      GeoLocationCreate: 'GeoLocationCreate',
+      CustomerDeviceFilter: 'CustomerDeviceFilter',
+      CustomerLoginAttemptConnection: 'CustomerLoginAttemptConnection',
+      CustomerLoginAttemptEdge: 'CustomerLoginAttemptEdge',
+      CustomerLoginAttempt: 'CustomerLoginAttempt',
+      CustomerDevice: 'CustomerDevice',
+      PageInfo: 'PageInfo',
+      Location: 'Location',
+      LocationAttribute: 'LocationAttribute',
+      LocationResource: 'LocationResource',
+      LOCATION_RESOURCE_TYPE: 'LOCATION_RESOURCE_TYPE',
+      ResourceItemFilter: 'ResourceItemFilter',
+      RESOURCE_ITEM_TYPE: 'RESOURCE_ITEM_TYPE',
+      ResourceItemConnection: 'ResourceItemConnection',
+      ResourceItemEdge: 'ResourceItemEdge',
+      ResourceItem: 'ResourceItem',
+      ResourceItemPrice: 'ResourceItemPrice',
+      LOCATION_RESOURCE_STATUS: 'LOCATION_RESOURCE_STATUS',
+      OpenCommerceFeature: 'OpenCommerceFeature',
+      HoursOfOperationGroup: 'HoursOfOperationGroup',
+      HoursOfOperation: 'HoursOfOperation',
+      WEEKDAY: 'WEEKDAY',
+      TransactionFilter: 'TransactionFilter',
+      TRANSACTION_STATUS: 'TRANSACTION_STATUS',
+      LoyaltyInstrumentFilter: 'LoyaltyInstrumentFilter',
+      TransactionPaymentInfoFilter: 'TransactionPaymentInfoFilter',
+      LocationFilter: 'LocationFilter',
+      LocationAttributeFilter: 'LocationAttributeFilter',
+      LocationResourceFilter: 'LocationResourceFilter',
+      BrandFilter: 'BrandFilter',
+      OpenCommerceFeatureFilter: 'OpenCommerceFeatureFilter',
+      HARDWARE_VENDOR: 'HARDWARE_VENDOR',
+      TRANSACTION_TYPE: 'TRANSACTION_TYPE',
+      PAYMENT_LEVEL: 'PAYMENT_LEVEL',
+      LOYALTY_LEVEL: 'LOYALTY_LEVEL',
+      FUEL_PUMP_STATUS: 'FUEL_PUMP_STATUS',
+      TransactionConnection: 'TransactionConnection',
+      TransactionEdge: 'TransactionEdge',
+      Transaction: 'Transaction',
+      ItemCurrency: 'ItemCurrency',
+      STAC: 'STAC',
+      TransactionPaymentInfo: 'TransactionPaymentInfo',
+      TransactionItem: 'TransactionItem',
+      ItemPrice: 'ItemPrice',
+      TRANSACTION_ITEM_TYPE: 'TRANSACTION_ITEM_TYPE',
+      ReceiptLine: 'ReceiptLine',
+      FuelReceipt: 'FuelReceipt',
+      TRANSACTION_PURCHASE_TYPE: 'TRANSACTION_PURCHASE_TYPE',
+      TransactionPaymentEvent: 'TransactionPaymentEvent',
+      TRANSACTION_EVENT_TYPE: 'TRANSACTION_EVENT_TYPE',
+      ClientToken: 'ClientToken',
+      Check: 'Check',
+      CheckLineItem: 'CheckLineItem',
+      CHECK_LINE_ITEM_TYPE: 'CHECK_LINE_ITEM_TYPE',
+      RateCardFilter: 'RateCardFilter',
+      OFFER_PAYMENT_TYPE: 'OFFER_PAYMENT_TYPE',
+      RateCard: 'RateCard',
+      RateCardItem: 'RateCardItem',
+      RateCardCategory: 'RateCardCategory',
+      LocationConnection: 'LocationConnection',
+      LocationEdge: 'LocationEdge',
+      AppConfig: 'AppConfig',
+      Image: 'Image',
+      BackgroundImage: 'BackgroundImage',
+      PayAtTableConfig: 'PayAtTableConfig',
+      PaymentConfig: 'PaymentConfig',
+      RewardHistory: 'RewardHistory',
+      RewardTransaction: 'RewardTransaction',
+      PowercardOfferList: 'PowercardOfferList',
+      PowercardOffer: 'PowercardOffer',
+      OFFER_TYPE: 'OFFER_TYPE',
+      PowercardOfferListResponse: 'PowercardOfferListResponse',
+      PowercardConfigItem: 'PowercardConfigItem',
+      FeaturesResponse: 'FeaturesResponse',
+      Feature: 'Feature',
+      DAVE_AND_BUSTERS_FEATURE: 'DAVE_AND_BUSTERS_FEATURE',
+      FeatureEnabledResponse: 'FeatureEnabledResponse',
+      TriggerException: 'TriggerException',
+      Mutation: 'Mutation',
+      AccessTokenByRefreshTokenInputType: 'AccessTokenByRefreshTokenInputType',
+      AuthTokens: 'AuthTokens',
+      Tokens: 'Tokens',
+      CustomerOTPRequest: 'CustomerOTPRequest',
+      OTP_CHANNEL: 'OTP_CHANNEL',
+      OTP_MODE: 'OTP_MODE',
+      CustomerOTPPayload: 'CustomerOTPPayload',
+      OTP: 'OTP',
+      CustomerOTPPayloadOrAuthTokens: 'CustomerOTPPayloadOrAuthTokens',
+      InauthTrustScoreValueInput: 'InauthTrustScoreValueInput',
+      InAuthDeviceRegistrationRequestInput:
+        'InAuthDeviceRegistrationRequestInput',
+      InAuthDeviceRegistrationResponse: 'InAuthDeviceRegistrationResponse',
+      CustomerRegistrationComplete: 'CustomerRegistrationComplete',
+      CustomerPersonNameCreate: 'CustomerPersonNameCreate',
+      CustomerDemographicsCreate: 'CustomerDemographicsCreate',
+      CustomerPreferenceCreate: 'CustomerPreferenceCreate',
+      PreferenceValueCreate: 'PreferenceValueCreate',
+      CustomerCreate: 'CustomerCreate',
+      CustomerAddressCreate: 'CustomerAddressCreate',
+      CustomerAgreementCreate: 'CustomerAgreementCreate',
+      CustomerPhoneNumberCreate: 'CustomerPhoneNumberCreate',
+      CustomerCreateVerify: 'CustomerCreateVerify',
+      CustomerUpdate: 'CustomerUpdate',
+      CustomerPersonNameUpdate: 'CustomerPersonNameUpdate',
+      CustomerAddressUpdate: 'CustomerAddressUpdate',
+      GeoLocationUpdate: 'GeoLocationUpdate',
+      CustomerDemographicsUpdate: 'CustomerDemographicsUpdate',
+      CustomerPhoneNumberUpdate: 'CustomerPhoneNumberUpdate',
+      CustomerPreferenceUpdate: 'CustomerPreferenceUpdate',
+      BrandCustomerPreferenceUpdate: 'BrandCustomerPreferenceUpdate',
+      PreferenceValueUpdate: 'PreferenceValueUpdate',
+      CustomerPaymentInstrumentCreate: 'CustomerPaymentInstrumentCreate',
+      PaymentInstrumentExpirationInput: 'PaymentInstrumentExpirationInput',
+      CustomerPaymentInstrumentVerify: 'CustomerPaymentInstrumentVerify',
+      CustomerPaymentInstrumentUpdate: 'CustomerPaymentInstrumentUpdate',
+      CustomerLoyaltyInstrumentCreate: 'CustomerLoyaltyInstrumentCreate',
+      CustomerLoyaltyInstrumentUpdate: 'CustomerLoyaltyInstrumentUpdate',
+      CustomerPasswordSet: 'CustomerPasswordSet',
+      CustomerPassword: 'CustomerPassword',
+      CustomerPasswordChange: 'CustomerPasswordChange',
+      CustomerPasswordCredentials: 'CustomerPasswordCredentials',
+      CustomerUsername: 'CustomerUsername',
+      AuthPayload: 'AuthPayload',
+      CustomerPasswordResetByOTPVerify: 'CustomerPasswordResetByOTPVerify',
+      CustomerPasswordReset: 'CustomerPasswordReset',
+      CustomerPasswordResetPaymentInstrumentVerify:
+        'CustomerPasswordResetPaymentInstrumentVerify',
+      CustomerDeviceCreate: 'CustomerDeviceCreate',
+      CustomerDeviceUpdate: 'CustomerDeviceUpdate',
+      CheckPaymentApplyInput: 'CheckPaymentApplyInput',
+      BillingInput: 'BillingInput',
+      PowercardConfigItemInput: 'PowercardConfigItemInput',
+      PowercardCreate: 'PowercardCreate',
+      PowercardAttributesUpdate: 'PowercardAttributesUpdate',
+      PowercardFundsAdd: 'PowercardFundsAdd',
+      Response: 'Response',
+      VirtualPowercardCreate: 'VirtualPowercardCreate',
+      CustomerPinCodeSet: 'CustomerPinCodeSet',
+      CustomerPinCode: 'CustomerPinCode',
+      CustomerPinCodeChange: 'CustomerPinCodeChange',
+      CustomerPinCodeVerify: 'CustomerPinCodeVerify',
+      Subscription: 'Subscription',
+      __Schema: '__Schema',
+      __Type: '__Type',
+      __TypeKind: '__TypeKind',
+      __Field: '__Field',
+      __InputValue: '__InputValue',
+      __EnumValue: '__EnumValue',
+      __Directive: '__Directive',
+      __DirectiveLocation: '__DirectiveLocation',
+      TransactionStart: 'TransactionStart',
+      OCTime: 'OCTime',
+      OtpInput: 'OtpInput',
+      AuthChallenge: 'AuthChallenge',
+      AuthChallengeType: 'AuthChallengeType',
+      SignUpInput: 'SignUpInput',
+      UserAttributes: 'UserAttributes',
+      Node: 'Node',
+      AccessTokenByRefreshTokenInput: 'AccessTokenByRefreshTokenInput',
+      MOBILE_DEVICE_TYPE: 'MOBILE_DEVICE_TYPE',
+      CustomerOTPVerify: 'CustomerOTPVerify',
+      CustomerPinCodeCredentials: 'CustomerPinCodeCredentials',
+      CustomerContact: 'CustomerContact',
+      CUSTOMER_REQUEST_TYPE: 'CUSTOMER_REQUEST_TYPE',
+      CustomerFeedback: 'CustomerFeedback',
+      LocationCheckIn: 'LocationCheckIn',
+      CustomerOTPPayloadOrAuthPayload: 'CustomerOTPPayloadOrAuthPayload',
+      TransactionServiceError: 'TransactionServiceError',
+      Rating: 'Rating',
+      PinCodeInputType: 'PinCodeInputType',
+      ChangePinCodeInputType: 'ChangePinCodeInputType',
+    },
+    _possibleTypeMap: {
+      CustomerOTPPayloadOrAuthTokens: {
+        CustomerOTPPayload: true,
+        AuthTokens: true,
+      },
+    },
+    _implementations: {},
+    _extensionsEnabled: true,
+  },
+  fragments: {},
+  operation: {
+    kind: 'OperationDefinition',
+    operation: 'query',
+    variableDefinitions: [],
+    directives: [],
+    selectionSet: {
+      kind: 'SelectionSet',
+      selections: [
+        {
+          kind: 'Field',
+          name: {
+            kind: 'Name',
+            value: 'adminIsFeatureEnabledForLatAndLong',
+            loc: {
+              start: 10,
+              end: 44,
+            },
+          },
+          arguments: [
+            {
+              kind: 'Argument',
+              name: {
+                kind: 'Name',
+                value: 'name',
+                loc: {
+                  start: 45,
+                  end: 49,
+                },
+              },
+              value: {
+                kind: 'EnumValue',
+                value: 'PAY_AT_TABLE',
+                loc: {
+                  start: 51,
+                  end: 63,
+                },
+              },
+              loc: {
+                start: 45,
+                end: 63,
+              },
+            },
+            {
+              kind: 'Argument',
+              name: {
+                kind: 'Name',
+                value: 'geoLocation',
+                loc: {
+                  start: 65,
+                  end: 76,
+                },
+              },
+              value: {
+                kind: 'ObjectValue',
+                fields: [
+                  {
+                    kind: 'ObjectField',
+                    name: {
+                      kind: 'Name',
+                      value: 'latitude',
+                      loc: {
+                        start: 97,
+                        end: 105,
+                      },
+                    },
+                    value: {
+                      kind: 'FloatValue',
+                      value: '39.9562149',
+                      loc: {
+                        start: 107,
+                        end: 117,
+                      },
+                    },
+                    loc: {
+                      start: 97,
+                      end: 117,
+                    },
+                  },
+                  {
+                    kind: 'ObjectField',
+                    name: {
+                      kind: 'Name',
+                      value: 'longitude',
+                      loc: {
+                        start: 119,
+                        end: 128,
+                      },
+                    },
+                    value: {
+                      kind: 'FloatValue',
+                      value: '-75.13864',
+                      loc: {
+                        start: 130,
+                        end: 139,
+                      },
+                    },
+                    loc: {
+                      start: 119,
+                      end: 139,
+                    },
+                  },
+                ],
+                loc: {
+                  start: 78,
+                  end: 368,
+                },
+              },
+              loc: {
+                start: 65,
+                end: 368,
+              },
+            },
+          ],
+          directives: [],
+          selectionSet: {
+            kind: 'SelectionSet',
+            selections: [
+              {
+                kind: 'Field',
+                name: {
+                  kind: 'Name',
+                  value: 'isEnabled',
+                  loc: {
+                    start: 376,
+                    end: 385,
+                  },
+                },
+                arguments: [],
+                directives: [],
+                loc: {
+                  start: 376,
+                  end: 385,
+                },
+              },
+              {
+                kind: 'Field',
+                name: {
+                  kind: 'Name',
+                  value: 'storeId',
+                  loc: {
+                    start: 390,
+                    end: 397,
+                  },
+                },
+                arguments: [],
+                directives: [],
+                loc: {
+                  start: 390,
+                  end: 397,
+                },
+              },
+              {
+                kind: 'Field',
+                name: {
+                  kind: 'Name',
+                  value: 'distance',
+                  loc: {
+                    start: 402,
+                    end: 410,
+                  },
+                },
+                arguments: [],
+                directives: [],
+                loc: {
+                  start: 402,
+                  end: 410,
+                },
+              },
+              {
+                kind: 'Field',
+                name: {
+                  kind: 'Name',
+                  value: 'address',
+                  loc: {
+                    start: 415,
+                    end: 422,
+                  },
+                },
+                arguments: [],
+                directives: [],
+                selectionSet: {
+                  kind: 'SelectionSet',
+                  selections: [
+                    {
+                      kind: 'Field',
+                      name: {
+                        kind: 'Name',
+                        value: 'street1',
+                        loc: {
+                          start: 431,
+                          end: 438,
+                        },
+                      },
+                      arguments: [],
+                      directives: [],
+                      loc: {
+                        start: 431,
+                        end: 438,
+                      },
+                    },
+                    {
+                      kind: 'Field',
+                      name: {
+                        kind: 'Name',
+                        value: 'street2',
+                        loc: {
+                          start: 445,
+                          end: 452,
+                        },
+                      },
+                      arguments: [],
+                      directives: [],
+                      loc: {
+                        start: 445,
+                        end: 452,
+                      },
+                    },
+                    {
+                      kind: 'Field',
+                      name: {
+                        kind: 'Name',
+                        value: 'city',
+                        loc: {
+                          start: 459,
+                          end: 463,
+                        },
+                      },
+                      arguments: [],
+                      directives: [],
+                      loc: {
+                        start: 459,
+                        end: 463,
+                      },
+                    },
+                    {
+                      kind: 'Field',
+                      name: {
+                        kind: 'Name',
+                        value: 'state',
+                        loc: {
+                          start: 470,
+                          end: 475,
+                        },
+                      },
+                      arguments: [],
+                      directives: [],
+                      loc: {
+                        start: 470,
+                        end: 475,
+                      },
+                    },
+                    {
+                      kind: 'Field',
+                      name: {
+                        kind: 'Name',
+                        value: 'zipCode',
+                        loc: {
+                          start: 482,
+                          end: 489,
+                        },
+                      },
+                      arguments: [],
+                      directives: [],
+                      loc: {
+                        start: 482,
+                        end: 489,
+                      },
+                    },
+                  ],
+                  loc: {
+                    start: 423,
+                    end: 495,
+                  },
+                },
+                loc: {
+                  start: 415,
+                  end: 495,
+                },
+              },
+            ],
+            loc: {
+              start: 370,
+              end: 499,
+            },
+          },
+          loc: {
+            start: 10,
+            end: 499,
+          },
+        },
+      ],
+      loc: {
+        start: 6,
+        end: 501,
+      },
+    },
+    loc: {
+      start: 0,
+      end: 501,
+    },
+  },
+  variableValues: {},
+  cacheControl: {
+    cacheHint: {
+      maxAge: 0,
+    },
+  },
+};
+
+export const mockFeatureEnabledResolveInfo = JSON.parse(JSON.stringify(data));

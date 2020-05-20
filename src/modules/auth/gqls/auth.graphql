@@ -1,0 +1,89 @@
+extend type Mutation {
+  logout: Boolean
+  getAccessTokenByRefreshToken(input: AccessTokenByRefreshTokenInputType!): AuthTokens
+  customerOTPRequest(
+    input: CustomerOTPRequest!
+  ): CustomerOTPPayload
+
+  customerLoginByOTP(
+    input: OTP!
+
+    # The log payload from InAuth
+    inAuthRegistrationPayload: String
+  ): CustomerOTPPayloadOrAuthTokens
+}
+
+scalar OCDate
+
+scalar OCDateTime
+
+scalar OCTime
+
+union CustomerOTPPayloadOrAuthTokens = CustomerOTPPayload | AuthTokens
+
+input CustomerOTPRequest {
+  identifier: String!
+  channel: OTP_CHANNEL
+  mode: OTP_MODE
+}
+
+input OTP {
+  session: String!
+  otp: String!
+}
+
+enum OTP_CHANNEL {
+  EMAIL
+  SMS
+}
+
+input OtpInput {
+  answer: String!
+  session: String!
+}
+
+enum OTP_MODE {
+  SIGNIN
+  SIGNUP
+  PASSWORD_RESET
+  UPDATE_IDENTIFIER
+}
+
+type CustomerOTPPayload {
+  session: String
+  success: Boolean!
+}
+
+type AuthTokens {
+  tokens: Tokens
+  inAuthDeviceResponse: String
+}
+
+type AuthChallenge {
+  session: String!
+  type: AuthChallengeType!
+}
+
+enum AuthChallengeType {
+  CUSTOM_CHALLENGE
+}
+
+input SignUpInput {
+  username: String!
+  attributes: UserAttributes
+}
+
+input UserAttributes {
+  birthdate: String!
+  email: String!
+}
+
+input AccessTokenByRefreshTokenInputType {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Tokens {
+  accessToken: String!
+  refreshToken: String!
+}

@@ -1,0 +1,8 @@
+export enum POWERCARD_STATUS_TYPE {
+  DISABLED = 'DISABLED',
+  INACTIVE = 'INACTIVE',
+  OPEN = 'OPEN',
+  STOLEN = 'STOLEN',
+  VIP = 'VIP',
+  VOID = 'VOID',
+}

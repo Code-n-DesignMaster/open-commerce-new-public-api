@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NotificationGraphqlClientService iosAppNotificationTokenRegister should match snapshot: for operation 1`] = `
+"mutation notificationTokenRegister($rawToken: String!, $customerUuid: ID!, $receiverType: NOTIFICATION_RECEIVER_TYPE!) {
+ notificationTokenRegister(rawToken: $rawToken, customerUuid: $customerUuid, receiverType: $receiverType) {
+
+  uuid
+  token
+  customerUuid
+  receiverType
+ }
+}"
+`;
+
+exports[`NotificationGraphqlClientService iosAppNotificationTokenRegister should match snapshot: for parameters 1`] = `
+Object {
+  "customerUuid": "testCustomerUuid",
+  "rawToken": "testRawIosToken",
+  "receiverType": "IOS_APP",
+}
+`;

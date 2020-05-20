@@ -1,0 +1,1959 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+# `Date` custom scalar type
+scalar OCDate
+
+# `DateTime` custom scalar type
+scalar OCDateTime
+
+# `OCJSON` custom scalar type
+scalar OCJSON
+
+# `OCPhoneNumber` custom scalar type
+scalar OCPhoneNumber
+
+# `OCEmailAddress` custom scalar type
+scalar OCEmailAddress
+
+# `OCURL` custom scalar type
+scalar OCURL
+
+# Generic response object
+type Response {
+  # The text status (ie. Record Deleted)
+  status: String
+
+  # Whether the request was successful or not
+  success: Boolean
+}
+
+type Rating {
+  numberOfStars: Float
+}
+
+extend type Query {
+  # Retrieve a single check by PayCode
+  check(storeId: Int!, payCode: ID!): Check
+
+  # Retrieve a list of open checks by table GUID
+  checkList(tableUuid: ID!): [Check]
+
+  getRateCards(input: RateCardFilter): RateCard
+
+  # Get the rate card associated with a given powercard
+  getRateCardByPowerCardUuid(
+    powerCardUuid: ID!
+    paymentType: OFFER_PAYMENT_TYPE
+  ): RateCard
+
+  # Get all stores or use filter to limit results
+  locations(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    # Filter for store locator
+    filter: LocationFilter
+  ): LocationConnection
+
+  # Get all possible powercard images that can be used
+  powercardImages: [PowercardImagePack]
+
+  # Get the app config data for a given device type
+  appConfig: AppConfig
+
+  rewardHistory(lastPage: Int): RewardHistory
+
+  # Get a list of all offers for a store or email address
+  offerList(
+    # Input criteria of store id
+    input: PowercardOfferList
+  ): [PowercardOffer] @deprecated
+
+  # Get a list of all offers for a store or email address
+  offerListWithActivationFees(
+    # Input criteria of store id
+    input: PowercardOfferList
+  ): PowercardOfferListResponse
+
+  # fetch mobile pass URLs for this powercard
+  powercardWalletPassUrl(
+    # Fetch urls for powercard with this UUID
+    powercardUuid: ID!
+
+    # The log payload from InAuth
+    inAuthLog: String
+  ): WalletPassUrl
+
+  # Query for checking if a power card is in the google wallet
+  isPowercardInGoogleWallet(powercardUuid: ID!): Boolean
+
+  # Get the powercard configuration for the customer
+  powercardConfig: [PowercardConfigItem]
+
+  # FOR DEBUGGING ONLY! Triggers an easy recharge notfication for a power card in a customer wallet
+  triggerEasyRechargeNotificationForPowercard(
+    customerUuid: ID!
+    powercardUuid: ID!
+  ): Boolean
+
+  # FOR DEBUGGING ONLY! Triggers a fast easy recharge notfication for a power card in a customer wallet
+  triggerFastEasyRechargeNotificationForPowercard(
+    customerUuid: ID!
+    powercardUuid: ID!
+    rateCardItemId: String
+  ): Boolean
+
+  # FOR DEBUGGING ONLY! Triggers a powercard balance update message as if from rabbitmq
+  triggerPowercardBalanceUpdateMessage(
+    cardNumber: String!
+    gameChips: String!
+  ): Boolean
+
+  # FOR DEBUGGING ONLY! Triggers a check update
+  triggerCheckUpdate(storeId: Int!, payCode: ID!): Boolean
+
+  # FOR DEBUGGING ONLY! Triggers a table update
+  triggerTableUpdate(tableUuid: ID!): Boolean
+
+  # Get current configuration of features
+  adminFeatures: FeaturesResponse @adminOnly
+
+  # Check if a feature is enabled for a single store ID
+  adminIsFeatureEnabled(name: DAVE_AND_BUSTERS_FEATURE!, storeId: Int!): Boolean
+
+  # Check if a feature is enabled for the store associated with the specified Lat and Long
+  adminIsFeatureEnabledForLatAndLong(
+    name: DAVE_AND_BUSTERS_FEATURE!
+    geoLocation: GeoLocationCreate
+  ): FeatureEnabledResponse
+}
+
+type FeaturesResponse {
+  features: [Feature]
+  locations: [Location]
+}
+
+type Feature {
+  name: DAVE_AND_BUSTERS_FEATURE!
+  description: String!
+  enabledStoreIds: [Int!]
+}
+
+type FeatureEnabledResponse {
+  isEnabled: Boolean!
+  storeId: Int
+  distance: Float
+  address: Address
+}
+
+enum DAVE_AND_BUSTERS_FEATURE {
+  PAY_AT_TABLE
+}
+
+extend type Mutation {
+  # Pay at Table check payment
+  checkPaymentApply(
+    # Payment details
+    input: CheckPaymentApplyInput!
+
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): Check
+
+  # Pay at Table Email me my receipt
+  receiptEmail(storeId: Int!, payCode: ID!): Boolean @adminOnly
+
+  ratingCreate(transactionUuid: ID!, numberOfStars: Float!): Boolean
+
+  # Set enabled state for a feature for a store, omit storeId to set all
+  adminFeatureEnableForStore(
+    name: DAVE_AND_BUSTERS_FEATURE!
+    enabled: Boolean!
+    storeId: Int
+  ): Boolean @adminOnly
+
+  # Set the powercard configuration for the customer
+  powercardConfigSet(config: [PowercardConfigItemInput]): [PowercardConfigItem]
+
+  powercardCreate(
+    # The new powercard details
+    input: PowercardCreate
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): Powercard
+
+  # Update an existing powercard
+  powercardUpdate(
+    # The powercard to update
+    powercardId: ID!
+    # New powercard attributes to update
+    attributes: PowercardAttributesUpdate
+  ): Powercard
+
+  # Add funds to an existing powercard that is in the customer's wallet
+  powercardFundsAdd(
+    # Transaction details
+    input: PowercardFundsAdd
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): Transaction
+
+  # Delete a single powercard from customer's wallet
+  powercardDelete(
+    # The powercard ID to delete
+    powercardId: ID!
+  ): Response
+
+  # Create a new virtual powercard and add funds to it
+  powercardVirtualPurchaseCreate(
+    # Details to create and fund a new virtual card for customer's wallet
+    input: VirtualPowercardCreate
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): Transaction
+
+  # enable a customer's powercard which has been disabled due to being reported lost or stolen
+  powercardEnable(
+    # Id of the powercard to enable
+    id: ID!
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): Powercard
+
+  # disable a customer's powercard due to being lost or stolen
+  powercardDisable(
+    # Id of the powercard to disable
+    id: ID!
+    reason: POWERCARD_STATUS_TYPE
+  ): Powercard
+
+  # FOR DEBUGGING ONLY!  Remove any receipts for a given payCode and StoreId
+  receiptsClear(storeId: Int!, payCode: String!): Boolean
+}
+
+# Contains all reward history data for a reward card
+type RewardHistory {
+  # The total number of Reward points earned for the current reward threshold for the card.
+  rewardPoints: Float
+
+  # The number of Reward points needed to achieve the next reward.
+  pointsToNextReward: Float
+
+  # The number of Rewards the card has earned during the current business day.
+  eligibleRewardCount: Int
+
+  # An array of rewards transactions
+  transactions: [RewardTransaction]
+
+  # The date that the reward history was last updated
+  lastUpdated: OCDate
+}
+
+# A single reward transaction
+type RewardTransaction {
+  # The type of transaction, which will be one of the following:  1â€“Points Earned | 2â€“Chips Earned | 3â€“Chips Expired
+  transactionType: Int
+
+  # The date of the transaction in a YYYY-MM-DD format.
+  transactionDate: OCDate
+
+  # The number of Rewards Points earned for the transaction (Only valid for Transaction Type 1, otherwise zero).
+  numberOfPoints: Float
+
+  # The number of Rewards Chips earned for the transaction (Only valid for Transaction Types 2 & 3, otherwise zero).
+  numberOfChips: Float
+
+  # The balance of Rewards Chips remaining (Only valid for Transaction Types 2 & 3, otherwise zero).
+  chipBalance: Float
+
+  # The Expiration Date of Rewards Chips (Only valid for Transaction Types 2 & 3, otherwise null).
+  expirationDate: OCDate
+}
+
+# Fields to add a new virtual powercard to wallet
+input VirtualPowercardCreate {
+  # The Store Id (aka Store Number) for the store in which the card is to be activated.
+  storeId: ID
+
+  # The Item ID of the Rate Card selected by the user, which will be used to determine activation fee, number of chips, etc.
+  rateCardItemIds: [Int]!
+
+  # The identifier for the offer
+  offerId: Int
+
+  # The payment instrument's UUID being used to purchase chips
+  paymentInstrumentUuid: ID
+
+  # Customer's personal name for the card
+  alias: String
+
+  # The corresponding Country for the specified Card Number, which will be â€œUSAâ€ or â€œCANâ€.
+  country: String!
+
+  # The amount paid for the chips, which should be limited to 2 decimal places and greater than or equal to 0.00. Note, this amount should include the activation fee, and will be validated against the amount(s) assigned to the Rate Card item to verify purchase amount.
+  dollarsPaid: Float!
+
+  # Image to be used on cover of card
+  imagePackUuid: ID
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  # One-time-use token generated to represent the instrument for transactions
+  nonce: String
+
+  # Payment instrument type must be provided when using the nonce
+  paymentInstrumentType: PAYMENT_INSTRUMENT_TYPE
+
+  # Payment billing data (Billing address information associated with a specific customer ID.)
+  billing: BillingInput
+}
+
+# Fields to add a new physical powercard to wallet
+input PowercardCreate {
+  # The Card Encoding consists of the Track1 information obtained from a card swipe. This string should begin with ‘%’, end with ‘?’, and be 14 characters in length.
+  cardEncoding: String
+
+  # The Card Number, which can range between 0 to 2,176,782,335.
+  cardNumber: String
+
+  # The RFID Data is a 64-character Base64 encoded string containing the encrypted data read from the RFID tag.
+  rfidData: String
+
+  # Customer's name for the card
+  alias: String
+
+  # Image to be used on cover of card
+  imagePackUuid: ID
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  # The security identification number associated with the specified Card Number.
+  pin: Int
+}
+
+# Input required to add additional powercard funds to the powercard
+input PowercardFundsAdd {
+  # Universally unique ID of the card to add funds to
+  uuid: ID!
+
+  # Store where the purchase is taking place
+  storeId: Int
+
+  # Rate card item to be used
+  rateCardItemIds: [Int]!
+
+  # The offer ID of the rate card selected by the user, which will b eused to determine discount, number of chips, etc.
+  offerId: Int
+
+  # Payment instrument to be used
+  paymentInstrumentUuid: ID
+
+  # The corresponding Country for the specified Card Number, which will be “USA” or “CAN”.
+  country: String!
+
+  # The amount paid for the chips, which should be limited to 2 decimal places and greater than or equal to 0.00. Note, this amount should include the activation fee, and will be validated against the amount(s) assigned to the Rate Card item to verify purchase amount.
+  dollarsPaid: Float!
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  # One-time-use token generated to represent the instrument for transactions
+  nonce: String
+
+  # Payment instrument type must be provided when using the nonce
+  paymentInstrumentType: PAYMENT_INSTRUMENT_TYPE
+
+  # Payment billing data (Billing address information associated with a specific customer ID.)
+  billing: BillingInput
+}
+
+# A powercard
+type Powercard {
+  # Universally unique ID of the card
+  uuid: ID!
+
+  # Is this a physical or virtual card
+  isPhysical: Boolean!
+
+  # card number on the powercard
+  cardNumber: String
+
+  # the status of the powercard
+  status: POWERCARD_STATUS_TYPE
+
+  # the type of card
+  cardType: POWERCARD_CARD_TYPE
+
+  # the card alias string
+  cardAlias: String
+
+  # array of images associated with the card
+  imagePack: PowercardImagePack
+
+  # The total number of chips that can be used to play any type of game (except Attraction games).
+  gameChips: Float
+
+  # The total number of chips that can be used to play simulator games (i.e., non-redemption games).
+  videoChips: Float
+
+  # The total number of reward chips earned through the rewards system.
+  rewardChips: Float
+
+  # The total number of chips that can be used to play attraction games.
+  attractionChips: Float
+
+  # The total number of tickets on the card.
+  tickets: Int
+
+  # The total number of Reward points earned for the current reward threshold for the card.
+  rewardPoints: Float
+
+  # The number of Reward points needed to achieve the next reward.
+  pointsToNextReward: Float
+
+  # Indicates whether the Power Card is registered in Rewards. (Only one card can be registered for rewards)
+  isRegisteredReward: Boolean
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+
+  walletPass: WalletPassUrl @deprecated
+}
+
+type WalletPassUrl {
+  # Url which contains a .pkpass file to be downloaded or a deeplink for android (https://pay.google.com/gp/v/save/{jwt_generated})
+  pkPassUrl: OCURL
+  googlePayUrl: OCURL
+}
+
+# Fields to update a powercard
+input PowercardAttributesUpdate {
+  # Customer's name for the card
+  alias: String
+
+  # Image to be used on cover of card
+  imagePackUuid: ID
+
+  # Indicates whether the Power Card is registered in Rewards. (Only one card can be registered for rewards)
+  isRegisteredReward: Boolean
+
+  # Is easy recharge enabled (ie. notify when chips balance is low)
+  easyRechargeEnabled: Boolean
+}
+
+# Input attributes to get a list of offers
+input PowercardOfferList {
+  # the store number
+  storeId: Int
+
+  # The center point to do a geo search from
+  epicenter: GeoLocationCreate
+
+  # Distance from the epicenter to find a store
+  radius: Float
+
+  # Just select the closest store to the provided epicenter regardless of radius being set or not
+  simpleClosest: Boolean
+
+  # The customer's email address
+  emailAddress: OCEmailAddress
+
+  # This tells MARS if the customer has activated Apple Pay or Google Pay
+  paymentType: OFFER_PAYMENT_TYPE
+}
+
+# An offer associated with a store or email address
+type PowercardOffer {
+  # The identifier for the offer.
+  offerId: Int
+
+  # The types of the offer, a single offer can be of many types.
+  offerTypes: [OFFER_TYPE]
+
+  # The title to be displayed for the offer.
+  title: String
+
+  # The description to be displayed for the offer.
+  description: String
+
+  # The dollar amount of the offer.
+  offerAmount: Float
+
+  # The URL of the image that should be displayed.
+  imageUrl: String
+
+  # The date from which the offer is valid.
+  validFrom: OCDate
+
+  # The date to which the offer is valid.
+  validTo: OCDate
+
+  # The disclaimer that should be displayed.
+  disclaimer: String
+
+  # The terms and conditions that should be displayed.
+  termsAndConditions: String
+
+  # Indicates whether the offer should be automatically applied to a guestâ€™s cart within the app.
+  autoApply: Boolean
+
+  # The Rate Card item which should be used for transaction.
+  item: RateCardItem
+}
+
+# Contains offer list items and the activation fee
+type PowercardOfferListResponse {
+  # Activation fee for first time purchases
+  activationFee: Float
+
+  # Activation item for first time purchases
+  activationItem: RateCardItem
+
+  # The list of power card offers
+  offerList: [PowercardOffer]
+}
+
+# Types of powercards
+enum POWERCARD_CARD_TYPE {
+  # Comp card
+  COMP
+
+  # Diagnostics card
+  DIAGNOSTICS
+
+  # Employee card
+  EMPLOYEE
+
+  # Gold card
+  GOLD
+
+  # Power card
+  POWER
+
+  # Power hour card
+  POWER_HOUR
+
+  # Service card
+  SERVICE
+
+  # VIP card
+  VIP
+
+  # WHQ Service card
+  WHQ_SERVICE
+}
+
+# Possible status of a powercard
+enum POWERCARD_STATUS_TYPE {
+  # Card is disabled
+  DISABLED
+
+  # Card is inactive
+  INACTIVE
+
+  # Card is open
+  OPEN
+
+  # Card reported stolen
+  STOLEN
+
+  # VIP Card
+  VIP
+
+  # Card is voided
+  VOID
+}
+
+# Easy Recharge setting input for a power card
+input PowercardConfigItemInput {
+  # Uuid of power card
+  powercardUuid: ID!
+
+  # Easy recharge setting
+  easyRechargeEnabled: Boolean!
+}
+
+# Easy Recharge setting for a power card
+type PowercardConfigItem {
+  # Uuid of power card
+  powercardUuid: ID!
+
+  # Easy recharge setting
+  easyRechargeEnabled: Boolean!
+}
+
+# An image for use on the cover of powercard
+type PowercardImagePack {
+  # powercard image's id
+  uuid: ID!
+
+  # Array of various full size image resoltuions
+  fullsizeImages: [PowercardImage]
+
+  # Array of various thumbnail image resoltuions
+  thumbnailImages: [PowercardImage]
+
+  # Name of the image from the collection of images available
+  name: String
+}
+
+type PowercardImage {
+  # powercard images' url
+  url: OCURL
+
+  # Width in pixels
+  width: Int
+
+  # Height in pixels
+  height: Int
+}
+
+# A rate card containing all of the prices and items available to add to a Powercard
+type RateCard {
+  # Heading text to display on frontend
+  rateCardHeadingText: String!
+
+  # Heading text for special offers
+  offerHeadingText: String
+
+  # Subheading text for special offers for display on the Rate Card view
+  offerRateCardSubHeadingText: String
+
+  # Subheading text for special offers for display on the Checkout view
+  offerCheckoutSubHeadingText: String
+
+  # Text for special offers for display inside the item list on the the Checkout view
+  offerCheckoutItemText: String
+
+  # Reflects the current discount percentage in the rate card prices
+  discountPercentage: Float
+
+  # Indicates whether this is a first time customer rate card or not
+  isNewCustomer: Boolean!
+
+  # The price to be charged for Attraction chips.
+  attractionPrice: Float
+
+  # A list of Items to be used when processing Attraction Chip selections (Note: this array will always contain exactly 6 elements for Attraction Chip purchases varying from 1-6).
+  attractionItemList: [RateCardItem]
+
+  # The fee to be charged when activating a new Powercard.
+  activationFee: Float
+
+  # The Rate Card item which should be used when processing a new card activation.
+  activationItem: RateCardItem
+
+  # This section contains an array of categories, which are referenced by the Menu Items below.
+  categoryList: [RateCardCategory]
+
+  # This section contains an array of items, which will be used to display the menu selections for the Rate Card information. This list should be used in conjunction with the CategoryList in order to display the Rate Card information in the application.
+  menuItemList: [RateCardItem]
+
+  # This section contains an array of items, which will be used to for upsell items listed in the MenuItemList above. This list will contain an item corresponding to each of the possible UpSell items listed in the MenuItemList.
+  upSellItemList: [RateCardItem]
+}
+
+# A category for a rate card which dictates how a rate is displayed to end user
+type RateCardCategory {
+  # The category identifier reference by each Item.
+  categoryId: Int
+
+  # The text to be displayed for the category.
+  label: String
+
+  # An index representing the order in which the categories should be displayed (1 = first).
+  sequence: Int
+
+  # The color that should be used for the label text, which will be in a six-digit hexadecimal format (i.e., #FFFFFF).
+  color: String
+}
+
+# An item on a ratecard that can be purchased
+type RateCardItem {
+  # The Item identifier that will be used when activating or recharging a Powercard.
+  itemId: Int
+
+  # The Category identifier, which should be used to obtain the item’s display information.
+  categoryId: Int
+
+  # The number of chips that will be added to the Powercard for the item. This value will be zero if the number of minutes is greater than zero.
+  chips: Float
+
+  # The price that should be displayed for the item
+  price: Float
+
+  #The original item price that should be displayed when promoting a discounted value proposition.
+  originalPrice: Float
+
+  # An index representing the order in which the items should be displayed (1 = first).
+  sequence: Int
+
+  # Indicates whether the item should be displayed as a “Best Value” item.
+  isBestValue: Boolean
+
+  # Indicates the Item Id that should be used when displaying upsell opportunities (0 = no upsell item available).
+  upSellId: Int
+
+  # The color that should be used for the item, which will be in a six-digit hexadecimal format (i.e., #FFFFFF).
+  color: String
+}
+
+input RateCardFilter {
+  # Use the store ID to select a specific store
+  storeId: Int
+
+  # The center point to do a geo search from
+  epicenter: GeoLocationCreate
+
+  # Distance from the epicenter to find a store
+  radius: Float
+
+  # Just select the closest store to the provided epicenter regardless of radius being set or not
+  simpleClosest: Boolean
+
+  isNewCustomer: Boolean
+
+  paymentType: OFFER_PAYMENT_TYPE
+}
+
+# A client token for authorizing payment on a transaction
+type ClientToken {
+  # The token
+  token: String
+}
+
+# A new geolocation coordinate
+input GeoLocationCreate {
+  # Latitude
+  latitude: Float!
+
+  # Longitude
+  longitude: Float!
+}
+
+# An updated geolocation coordinate
+input GeoLocationUpdate {
+  # Latitude
+  latitude: Float!
+
+  # Longitude
+  longitude: Float!
+}
+
+## Filter by a geo location coordinate
+#input GeoLocationFilter {
+#  # The epicenter coordinate to use for filter
+#  epicenter: GeoLocationCreate!
+#
+#  # Radius around epicenter to include in filter
+#  radius: Float!
+#}
+
+# The name details of a person
+type PersonName {
+  # Title (ie. Mr, Ms, Mrs, Dr)
+  title: String
+
+  # First name
+  first: String
+
+  # Middle name
+  middle: String
+
+  # Last name
+  last: String
+
+  # Suffix (ie. Jr, Sr, VII)
+  suffix: String
+}
+
+# Address of site
+type Address {
+  # Name of the address
+  alias: String
+
+  # Street address (ie. 1234 Any St)
+  street1: String
+
+  # Secondary street address (ie. Apt 007)
+  street2: String
+
+  # City field
+  city: String
+
+  # State field
+  state: String
+
+  # Zip code (ie. 19103)
+  zipCode: String!
+
+  # Geo coordinates of the address
+  geoLocation: GeoLocation
+}
+
+# Coordinates of a geo location
+type GeoLocation {
+  # Latitude field
+  latitude: Float!
+
+  # Longitude field
+  longitude: Float!
+}
+
+# Allowed phone number types
+enum PHONE_TYPE {
+  # Home land line
+  HOME
+
+  # Location (ie. a store)
+  LOCATION
+
+  # Mobile cellular based phone
+  MOBILE
+
+  # A work number
+  WORK
+}
+
+# Customer information
+type Customer {
+  uuid: ID!
+
+  # A unique to the tenant username
+  username: String!
+
+  # Indicates the customer is new and hasn't transacted yet
+  isNewCustomer: Boolean!
+
+  # Attributes regarding the customer's name
+  name: PersonName
+
+  # Email address
+  email: OCEmailAddress
+
+  # Flag to indicate if customer's email address has been verified
+  emailVerified: Boolean!
+
+  # Addresses (ie. mailing)
+  #addresses: [Address]
+
+  # Wallet containing array of customer's payment methods (ie. a credit card, debit card, or prepaid card)
+  paymentWallet: [PaymentInstrument]
+
+  # Wallet containing array of customer's loyalty instruments
+  #loyaltyWallet: [LoyaltyInstrument]
+
+  # Wallet containing array of customer's powercards
+  powercardWallet: [Powercard]
+
+  # Information regarding demographics details of the customer
+  #demographics: Demographics
+
+  # Array of phone numbers that the customer can be reached at
+  #phoneNumbers: [ContactPhoneNumber]
+
+  # The current status of the customer's account
+  #status: CUSTOMER_STATUS!
+
+  # The agreements that have been accepted by the customer
+  #agreements: [CustomerAgreement]
+
+  # The brands that a customer belongs to
+  #brands: [Brand]
+
+  # Customer preferences (ie. should receipt be printed)
+  #preferences: [CustomerPreference]
+
+  # Filter history of login attempts
+  #loginHistory(first: Int, after: String, last: Int, before: String, filter: CustomerLoginAttemptFilter): CustomerLoginAttemptConnection
+
+  # The customer's default location (ie. default store)
+  #defaultLocation: Location
+
+  # Devices associated with the customer
+  #devices: [CustomerDevice]
+
+  # Transactions associated with the customer
+  #transactions(first: Int, after: String, last: Int, before: String, filter: TransactionFilter): TransactionConnection
+}
+
+# Input values for adding/editing an address
+input CustomerAddressUpdate {
+  # Name of the address
+  alias: String
+
+  # Street address (ie. 1234 Any St)
+  street1: String
+
+  # Secondary street address (ie. Apt 007)
+  street2: String
+
+  # City field
+  city: String
+
+  # State field
+  state: String
+
+  # Zip code (ie. 19103)
+  zipCode: String
+
+  # Geo coordinates of the address
+  geoLocation: GeoLocationUpdate
+}
+
+# Input values for adding/editing an address
+input CustomerAddressCreate {
+  # Name of the address
+  alias: String!
+
+  # Street address (ie. 1234 Any St)
+  street1: String
+
+  # Secondary street address (ie. Apt 007)
+  street2: String
+
+  # City field
+  city: String
+
+  # State field
+  state: String
+
+  # Zip code (ie. 19103)
+  zipCode: String
+
+  # Geo coordinates of the address
+  geoLocation: GeoLocationCreate
+}
+
+# A method of payment
+type PaymentInstrument {
+  # Universally Unique ID of the instrument
+  uuid: ID!
+
+  # Name of the instrument
+  alias: String
+
+  # The display value to represent the card from payment provider for use by the client (ie. Visa ............4568)
+  providerNickName: String
+
+  # Account number for the instrument
+  accountNumber: String
+
+  # Billing address associated with the instrument
+  address: Address
+
+  # The type of the instrument
+  paymentType: PAYMENT_INSTRUMENT_TYPE
+
+  # The expiration date of this instrument
+  expiration: PaymentInstrumentExpiration
+
+  # Current status (ie. active, pending verification)
+  status: PAYMENT_INSTRUMENT_STATUS!
+
+  # Is this the customer's default payment method
+  isDefault: Boolean
+
+  # The number to be displayed on the client side to represent this instrument
+  displayNumber: String
+
+  # The payment provider that should be processing the payments using this instrument
+  paymentProvider: PaymentProvider
+}
+
+# The expiration date of this instrument
+type PaymentInstrumentExpiration {
+  # The month of the expiration date, formatted MM.
+  expirationMonth: String
+  # he year of the expiration date, formatted YYYY.
+  expirationYear: String
+}
+
+# A payment provider used for processing payments
+type PaymentProvider {
+  # Name of the provider
+  name: String!
+}
+
+# Status of a payment instrument
+enum PAYMENT_INSTRUMENT_STATUS {
+  # Active status
+  ACTIVE
+
+  # Inactive and unallowed to be used
+  INACTIVE
+
+  # Pending verification to be put into use
+  PENDING
+}
+
+# Allowed payment instrument types
+enum PAYMENT_INSTRUMENT_TYPE {
+  # Amazon Pay
+  AMAZON_PAY
+
+  # American Express
+  AMERICAN_EXPRESS
+
+  # Apple Pay
+  APPLE_PAY
+
+  # Apple Pay - Visa
+  APPLE_PAY_VISA
+
+  # Apple Pay - Mastercard
+  APPLE_PAY_MASTERCARD
+
+  # Apple Pay - American Express
+  APPLE_PAY_AMERICAN_EXPRESS
+
+  # Apple Pay - Discover
+  APPLE_PAY_DISCOVER
+
+  # Cartes Bancaires
+  CARTES_BANCAIRES
+
+  # Chase Pay
+  CHASE_PAY
+
+  # China Union Pay
+  CHINA_UNION_PAY
+
+  # Citi Pay
+  CITI_PAY
+
+  # Credit card
+  CREDIT
+
+  # Debit card
+  DEBIT
+
+  # Discover
+  DISCOVER
+
+  # EFTPOS
+  EFTPOS
+
+  # Gift card
+  GIFT
+
+  # Google Pay
+  GOOGLE_WALLET
+
+  # Google Pay
+  GOOGLE_PAY
+
+  # Google Pay - Visa
+  GOOGLE_PAY_VISA
+
+  # Google Pay - Mastercard
+  GOOGLE_PAY_MASTERCARD
+
+  # Google Pay - American Express
+  GOOGLE_PAY_AMERICAN_EXPRESS
+
+  # Google Pay - Discover
+  GOOGLE_PAY_DISCOVER
+
+  # ID Credit
+  ID_CREDIT
+
+  # Interac
+  INTERAC
+
+  # JCB
+  JCB
+
+  # Maestro
+  MAESTRO
+
+  # MasterCard
+  MASTERCARD
+
+  # Mastercard Masterpass
+  MASTERPASS
+
+  # Paypal
+  PAYPAL
+
+  # Prepaid card
+  PREPAID
+
+  # Private Label
+  PRIVATE_LABEL
+
+  # Quic Pay
+  QUIC_PAY
+
+  # Suica
+  SUICA
+
+  # Venmo
+  VENMO
+
+  # Visa
+  VISA
+
+  # Visa Checkout
+  VISA_CHECKOUT
+
+  # Visa VPay
+  VISA_VPAY
+}
+
+# A new geolocation coordinate
+input GeoLocationCreate {
+  # Latitude
+  latitude: Float!
+
+  # Longitude
+  longitude: Float!
+}
+
+input BrandFilter {
+  # Portion or all of a brand's name
+  nameContains: String
+
+  # Exact match only
+  nameEquals: String
+
+  # Portion or all of a tenants name
+  tenantContains: String
+
+  # Exact match only
+  tenantEquals: String
+}
+
+# Filter values for selecting locations
+input LocationFilter {
+  # Universally unique ID equals exact match
+  uuidEquals: ID
+
+  # Select by attributes' value
+  attributes: LocationAttributeFilter
+
+  # Select by resources' value
+  resources: LocationResourceFilter
+
+  # Brand
+  brand: BrandFilter
+
+  # Select by open commerce feature details at location
+  openCommerceFeatures: OpenCommerceFeatureFilter
+
+  # The radius in km to return results for, must also provide geoLocation
+  radius: Float
+
+  # The location to use as epicenter of search
+  geoLocationEquals: GeoLocationCreate
+}
+
+# A filter for selecting locations with matching attributes
+input LocationAttributeFilter {
+  # Part or entire attribute name match
+  nameContains: String
+
+  # Exact match only (cheaper than contains)
+  nameEquals: String
+
+  # Part or entire attribute description match
+  descriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  descriptionEquals: String
+
+  # Part or entire attribute value match
+  valueContains: String
+
+  # Exact match only (cheaper than contains)
+  valueEquals: String
+}
+
+# A filter for selecting locations with matching resources
+input LocationResourceFilter {
+  # Exact match only (cheaper than contains)
+  typeEquals: LOCATION_RESOURCE_TYPE
+
+  # The type of resource to lookup
+  typeContains: [LOCATION_RESOURCE_TYPE]
+
+  # Lookup by items matching the filter
+  items: ResourceItemFilter
+
+  # The current status of the resource at the location
+  statusEquals: LOCATION_RESOURCE_STATUS
+
+  # Matches any statuses in the array
+  statusContains: [LOCATION_RESOURCE_STATUS]
+}
+
+# Filter by attributes of an item
+input ResourceItemFilter {
+  # Universally unique id of the item
+  uuid: ID
+
+  # All or part of SKU Unique to the brand
+  skuContains: String
+
+  # Exact match only (cheaper than contains)
+  skuEquals: String
+
+  # All or part of description
+  descriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  descriptionEquals: String
+
+  # Minimum unit price
+  unitPriceMin: Float
+
+  # Maximum unit price
+  unitPriceMax: Float
+
+  # Exact match only (cheaper than contains)
+  unitPriceEquals: Float
+
+  # Type of item
+  itemTypeEquals: RESOURCE_ITEM_TYPE
+
+  # matches any type in the array
+  itemTypeContains: [RESOURCE_ITEM_TYPE]
+
+  # All or part of merchandise code
+  merchandiseCodeContains: String
+
+  # Exact match only (cheaper than contains)
+  merchandiseCodeEquals: String
+
+  # All or part of the POS Code
+  posCodeContains: String
+
+  # Exact match only (cheaper than contains)
+  posCodeEquals: String
+
+  # All or part of the POS Code Modifier
+  posCodeModifierContains: String
+
+  # Exact match only (cheaper than contains)
+  posCodeModifierEquals: String
+
+  # All or part of the POS Code Format
+  posCodeFormatContains: String
+
+  # Exact match only (cheaper than contains)
+  posCodeFormatEquals: String
+
+  # Unit of Measure (ie. ea, lb, gal)
+  unitOfMeasureContains: String
+
+  # Exact match only (cheaper than contains)
+  unitOfMeasureEquals: String
+
+  # All or part of the description to be printed on a receipt
+  receiptDescriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  receiptDescriptionEquals: String
+}
+
+# A filter for selecting locations with matching Open Commerce Feature support
+input OpenCommerceFeatureFilter {
+  # Part or entire name of the feature
+  nameContains: String
+
+  # Exact match only (cheaper than contains)
+  nameEquals: String
+
+  # Part or entire description of the feature
+  descriptionContains: String
+
+  # Exact match only (cheaper than contains)
+  descriptionEquals: String
+
+  # Part or entire value of the feature
+  valueContains: String
+
+  # Exact match only (cheaper than contains)
+  valueEquals: String
+}
+
+# The current location of the user to check into a store
+input LocationCheckIn {
+  # Current location
+  geoLocation: GeoLocationCreate
+}
+
+# A location such as a store or gas station
+type Location {
+  # The id specific to the brand (ie. Store Number 5)
+  brandSpecificLocationId: Int
+
+  # Physical address
+  address: Address
+
+  # Attributes (ie. carwash, service bay)
+  attributes: [LocationAttribute]
+
+  # Resources (ie. car wash, fuel pump)
+  resources: [LocationResource]
+
+  # Distance in km to the location from users geocode
+  distance: Float
+
+  # Brand
+  brand: Brand
+
+  # Phone number
+  phoneNumbers: [ContactPhoneNumber]
+
+  # Array of Open Commerce features and whether or not they are supported
+  openCommerceFeatures: [OpenCommerceFeature]
+
+  # Array of days with their hours
+  hoursOfOperationGroup: HoursOfOperationGroup
+
+  # Any special case hours that should be shown
+  specialHours: String
+}
+
+# Connection to return paginated locations
+type LocationConnection {
+  # Edges
+  edges: [LocationEdge]
+
+  # Pagination info
+  pageInfo: PageInfo!
+}
+
+# A location to be returned
+type LocationEdge {
+  # Cursor of the Location
+  cursor: String!
+
+  # The Location
+  node: Location
+}
+
+# Group of hours
+type HoursOfOperationGroup {
+  # Name of the group (ie. Regular Business Hours)
+  alias: String
+
+  # Array of hours (ie. this could be a record for each weekday, or multiple for each day, or just a single record)
+  hours: [HoursOfOperation]
+}
+
+# Times a location is open
+type HoursOfOperation {
+  # Which day are these hours for
+  dayOfWeek: WEEKDAY
+
+  # Time the location opens
+  openTime: String
+
+  # Time the location closes
+  closeTime: String
+
+  # If hours are not broken down by day of week
+  genericHoursString: String
+}
+
+# A feature specific to Open Commerce
+type OpenCommerceFeature {
+  # Name of the feature
+  name: String!
+
+  # Description of the feature
+  description: String
+
+  # Value of the feature
+  value: String
+}
+
+# An attribute of the location (ie. carwash, service bay)
+type LocationAttribute {
+  # Name of the attribute
+  name: String!
+
+  # Description of the attribute
+  description: String
+
+  # Value of the attribute
+  value: String
+}
+
+# A resource which contains sale itesm such as fuel pump or store
+type LocationResource {
+  # The type of resource
+  resourceType: LOCATION_RESOURCE_TYPE!
+
+  # The position of the resource within the Location (ie. pump number)
+  position: String
+
+  # Items available at the resource
+  items(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    filter: ResourceItemFilter
+  ): ResourceItemConnection
+
+  # Status of the resource
+  status: LOCATION_RESOURCE_STATUS
+}
+
+# An item at a resource
+type ResourceItem {
+  # Universally unique ID of the item
+  uuid: ID!
+
+  # SKU unique to the Brand
+  sku: String!
+
+  # Description
+  description: String
+
+  # Price per unit
+  unitPrice: ResourceItemPrice
+
+  # Type of item (ie. tobacco, fuel)
+  itemType: RESOURCE_ITEM_TYPE
+
+  # Merchandise Code
+  merchandiseCode: String
+
+  # POS Code
+  posCode: String
+
+  # POS Code Modifier
+  posCodeModifier: String
+
+  # Format of the POS Code
+  posCodeFormat: String
+
+  # Unit of measure (ex. ea, gal)
+  unitOfMeasure: String
+
+  # Description of item to go on receipt
+  receiptDescription: String
+}
+
+# Price details of an item
+type ItemPrice {
+  # Price to use for display purposes (ie. $1.23)
+  displayPrice: String!
+
+  # Price in number format (ie. 1.23)
+  price: Float!
+}
+
+# The type of currency (ie. USD, EUR)
+type ItemCurrency {
+  # Currency Code (ie. USD, EUR)
+  code: String
+
+  # Symbol to represent the currency (ie. $)
+  symbol: String
+}
+
+# Connection to return paginated locations
+type ResourceItemConnection {
+  # Edges
+  edges: [ResourceItemEdge]
+
+  # Pagination info
+  pageInfo: PageInfo!
+}
+
+# A location to be returned
+type ResourceItemEdge {
+  # Cursor of the Location
+  cursor: String!
+
+  # The Location
+  node: ResourceItem
+}
+
+# Price of an item
+type ResourceItemPrice {
+  # Price if paying by credit card
+  creditPrice: Float!
+
+  # Price if paying by cash
+  cashPrice: Float!
+}
+
+# Type of an item
+enum RESOURCE_ITEM_TYPE {
+  # Carwash
+  CAR_WASH
+
+  # Fuel
+  FUEL
+
+  # Lottery
+  LOTTERY
+
+  # Misc Convenience Item
+  MISC_CONVENIENCE
+
+  # Snacks
+  SNACK
+
+  # Tobacco
+  TOBACCO
+}
+
+# Type of a resource
+enum LOCATION_RESOURCE_TYPE {
+  # Car wash
+  CAR_WASH
+
+  # Fuel pump
+  FUEL_PUMP
+
+  # Store
+  STORE
+}
+
+# Status of a resource
+enum LOCATION_RESOURCE_STATUS {
+  # Available
+  AVAILABLE
+
+  # In Use
+  INUSE
+
+  # Offline
+  OFFLINE
+
+  # Unavailable
+  UNAVAILABLE
+}
+
+# Filter by a geo location coordinate
+input GeoLocationFilter {
+  # The epicenter coordinate to use for filter
+  epicenter: GeoLocationCreate!
+
+  # Radius around epicenter to include in filter
+  radius: Float!
+}
+
+# A unique node in the database
+interface Node {
+  # Universally unique identifier of the node
+  uuid: ID!
+}
+
+# Base PageInfo object to handle pagination
+type PageInfo {
+  # Does this data contain another page
+  hasNextPage: Boolean!
+
+  # Does this data contain a previous page
+  hasPreviousPage: Boolean!
+
+  # Where does this data start
+  startCursor: String
+
+  # Where does this data end
+  endCursor: String
+}
+
+# A phone number to be potentially contacted on
+type ContactPhoneNumber {
+  # Name of the number (ie. Work, Personal, My iPhone)
+  alias: String
+
+  # The phone number (ie. 123-456-7890 or 1234567890)
+  phoneNumber: OCPhoneNumber!
+
+  # The type of phone number
+  phoneType: PHONE_TYPE!
+}
+
+# The name details of a person
+type PersonName {
+  # Title (ie. Mr, Ms, Mrs, Dr)
+  title: String
+
+  # First name
+  first: String
+
+  # Middle name
+  middle: String
+
+  # Last name
+  last: String
+
+  # Suffix (ie. Jr, Sr, VII)
+  suffix: String
+}
+
+# Data to be sent to mobile app when booting up
+type AppConfig {
+  # The terms and conditions agreement
+  termsConditions: BrandAgreement
+
+  # The privacy policy agreement
+  privacyPolicy: BrandAgreement
+
+  # All of the available promo images
+  promoImages: [Image]
+
+  # All of the available powercard images
+  powercardImages: [PowercardImagePack]
+
+  # All of the active agreements
+  agreements: [BrandAgreement]
+
+  # Any brand specific customer preferences
+  customerPreferences: [BrandCustomerPreference]
+
+  # Preference for setting whether the customer uses biometric authentication
+  biometricPreference: BrandCustomerPreference
+
+  # Preference for subscribing to marketing emails
+  marketingOptInPreference: BrandCustomerPreference
+
+  # All of the supported payment types for the device type requesting the app config
+  supportedPaymentTypes: [PAYMENT_INSTRUMENT_TYPE]
+
+  # All of the supported payment types for the device type requesting the app config
+  supportedApplePayPaymentTypes: [PAYMENT_INSTRUMENT_TYPE]
+
+  # All of the supported payment types for the device type requesting the app config
+  supportedGoogleWalletPaymentTypes: [PAYMENT_INSTRUMENT_TYPE]
+
+  # App background
+  backgroundImage: BackgroundImage
+
+  # Flag to indicate if frontend should enable App Rating Popup
+  enableAppRatingPopup: Boolean
+
+  # Flag to indicate if Remove Powercard button is shown in mobile app
+  enableRemovePowercardButton: Boolean
+
+  # Config for Pay at Table
+  payAtTable: PayAtTableConfig
+
+  paymentConfig: PaymentConfig
+}
+
+# Config for Payment related functionality
+type PaymentConfig {
+  maxAllowedPaymentCards: Int!
+}
+
+# Config for Pay at Table
+type PayAtTableConfig {
+  # Label for first tip radio button
+  tip1: String
+
+  # Label for 2nd tip radio button
+  tip2: String
+
+  # Label for 3rd tip radio button
+  tip3: String
+}
+
+# App background
+type BackgroundImage {
+  # Date that this image is active
+  activeAt: OCDateTime
+
+  # Collection of image resolutions
+  images: [Image]
+}
+
+# An image
+type Image {
+  # images' url
+  url: OCURL
+
+  # Width in pixels
+  width: Int
+
+  # Height in pixels
+  height: Int
+}
+
+# Brand of a tenant
+type Brand {
+  # Name of the brand
+  name: String!
+
+  # Tenant associated with the brand
+  tenant: Tenant!
+
+  # Array of customer agreements (ie. privacy policy) that this brand requires
+  agreements: [BrandAgreement]
+
+  # Array of available customer preferences that can be set in the Customer object
+  preferences: [BrandCustomerPreference]
+
+  # The types of payment methods this brand supports
+  supportedPaymentTypes: [PAYMENT_INSTRUMENT_TYPE]
+}
+
+# A preference available to be set by customer of the brand
+type BrandCustomerPreference {
+  # ID of the preference
+  uuid: ID!
+
+  # Name of the preference (ie. email_newsletter)
+  name: String
+
+  # A description of the preference (ie. receive email newsletter)
+  description: String
+}
+
+# Agreement related to the brand (ie. privacy policy) This represents all of the agreements under a brand
+type BrandAgreement {
+  # Universally unique ID of the brand agreement
+  uuid: ID!
+
+  # Name of the agreement
+  name: String!
+
+  # The url to show the agreement
+  url: OCURL
+
+  # When this agreement was first active (indicating any user that agreed prior to this date needs to re-agree)
+  activeAt: OCDateTime
+}
+
+# Agreement related to a customer (This represents only the agreements that were agreed to)
+type CustomerAgreement {
+  # The current brand agreement this represents
+  brandAgreement: BrandAgreement
+
+  # Name of the agreement
+  name: String!
+
+  # The url to show the agreement that was originally signed
+  url: OCURL
+
+  # When the customer agreed to this agreement
+  agreedAt: OCDateTime
+}
+
+# A tenant of Open Commerce
+type Tenant {
+  # Potentially not unique name of the tenant
+  name: String!
+}
+
+# Allowed phone number types
+enum PHONE_TYPE {
+  # Home land line
+  HOME
+
+  # Location (ie. a store)
+  LOCATION
+
+  # Mobile cellular based phone
+  MOBILE
+
+  # A work number
+  WORK
+}
+
+# Available days of the week
+enum WEEKDAY {
+  # Friday
+  FRIDAY
+
+  # Monday
+  MONDAY
+
+  # Saturday
+  SATURDAY
+
+  # Sunday
+  SUNDAY
+
+  # Thursday
+  THURSDAY
+
+  # Tuesday
+  TUESDAY
+
+  # Wednesday
+  WEDNESDAY
+}
+
+enum MOBILE_DEVICE_TYPE {
+  # Android based operating system
+  ANDROID
+
+  # Apple based operating system
+  IOS
+}
+
+# Type for indicating if user activated Apple Pay or Google Pay
+# when fetching offers.
+enum OFFER_PAYMENT_TYPE {
+  # User has not activated apple pay or google pay
+  NONE
+
+  # User has activated apple pay
+  APPLE_PAY
+
+  # User has activated google pay
+  GOOGLE_PAY
+}
+
+# This enum represents the offer type bits in the MARS OfferType value.
+enum OFFER_TYPE {
+  # The offer has no special target criteria
+  NONE
+
+  # The offer is sent to a single email address
+  EMAIL
+
+  # The offer is for a new user
+  NEW_USER
+
+  # The offer is sent to existing users
+  EXISTING_USER
+
+  # The offer is sent to users who selected this store ID as their preferred store
+  STORE_ID
+
+  # The offer is sent to users who selected a preferred store within this state
+  STATE
+
+  # The offer is sent to users who have a chip balance above or below this value
+  CHIP_BALANCE
+
+  # The offer is sent to users who have a ticket balance above or below this value
+  TICKET_BALANCE
+
+  # The offer is sent to users who have activated and paid with Apple Pay
+  APPLE_PAY
+
+  # The offer is sent to users who have activated and paid with Google Pay
+  GOOGLE_PAY
+
+  # The offer can only be applied to physical power cards
+  PHYSICAL_CARD
+
+  # The offer can only be applied to digital power cards
+  DIGITAL_CARD
+}
+
+enum CHECK_LINE_ITEM_TYPE {
+  MENU_ITEM
+  TIP
+  TENDER
+  REFERENCE
+  DISCOUNT
+}
+
+type Check {
+  # Time and date the check was opened
+  checkOpenTime: OCDateTime!
+
+  # Other charges
+  other: Float!
+
+  # Unique ID of check
+  payCode: String!
+
+  # Total amount paid on check so far
+  payment: Float!
+
+  # ID of store where check was opened
+  storeId: Int!
+
+  # Total of menu item prices
+  subTotal: Float!
+
+  # Tax to be added to subtotal
+  tax: Float!
+
+  # Total amount of bill
+  total: Float!
+
+  # Line items of the check
+  lineItems: [CheckLineItem]!
+
+  # Reward points earned on this check
+  rewardPoints: Float
+
+  # ID of the transaction generated from payment
+  transactionUuid: ID
+}
+
+type CheckLineItem {
+  # Price of item
+  amount: Float!
+
+  # Textual description of the item
+  description: String!
+
+  # Type of line item
+  itemType: CHECK_LINE_ITEM_TYPE
+
+  # Line number of this item
+  lineNumber: Int!
+
+  # Number of this item purchased
+  quantity: Int!
+
+  # Seat number of the guest who ordered this item
+  seat: Int!
+}
+
+# Input type for checkPaymentApply
+input CheckPaymentApplyInput {
+  # The amount paid
+  dollarsPaid: Float!
+
+  # One-time-use token generated to represent the payment instrument for transactions
+  nonce: String
+
+  # The unique identifier of the check to be paid
+  payCode: ID!
+
+  # Payment instrument to be used
+  paymentInstrumentUuid: ID
+
+  # Payment instrument type must be provided when using the nonce
+  paymentInstrumentType: PAYMENT_INSTRUMENT_TYPE
+
+  # Store where the purchase is taking place
+  storeId: Int!
+
+  # The tax amount
+  tax: Float!
+
+  # The tip amount
+  tip: Float!
+
+  # Payment billing data (Billing address information associated with a specific customer ID.)
+  billing: BillingInput
+}
+
+
+input BillingInput {
+  # The postal code. Postal code must be a string of 4-9 alphanumeric characters, optionally separated by a dash or a space. Spaces and hyphens are ignored.
+  zipCode: String
+}
+
+type Subscription {
+  # Pay at table asynchronous check updates
+  tableUpdated(tableUuid: ID!): [Check]
+
+  checkUpdated(storeId: Int!, payCode: ID!): Check
+}

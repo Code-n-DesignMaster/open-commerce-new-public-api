@@ -1,0 +1,239 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthGraphqlClientService customerLoginByOTP should match snapshot: for operation 1`] = `
+"mutation customerLoginByOTP($input: OTP!) {
+ customerLoginByOTP(input: $input) {
+
+  ... on CustomerOTPPayload {
+   session
+   success
+  }
+  ... on AuthTokens {
+   tokens {
+    accessToken
+    refreshToken
+   }
+  }
+ }
+}"
+`;
+
+exports[`AuthGraphqlClientService customerLoginByOTP should match snapshot: for parameters 1`] = `
+Object {
+  "deviceId": "testDeviceId",
+  "input": Object {
+    "otp": "testOtp",
+    "session": "testSession",
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService customerOTPRequest should match snapshot: for operation 1`] = `
+"mutation customerOTPRequest($input: CustomerOTPRequest!) {
+ customerOTPRequest(input: $input) {
+
+  session
+  success
+  sub
+ }
+}"
+`;
+
+exports[`AuthGraphqlClientService customerOTPRequest should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "channel": "EMAIL",
+    "identifier": "testIdentifier",
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService customerUsernameChange should match snapshot: for operation 1`] = `
+"mutation customerUsernameChange($newUsername: String, $sub: String) {
+ customerUsernameChange(newUsername: $newUsername, sub: $sub)
+}"
+`;
+
+exports[`AuthGraphqlClientService customerUsernameChange should match snapshot: for parameters 1`] = `
+Object {
+  "newUsername": "testNewUsername",
+  "sub": "testSub",
+}
+`;
+
+exports[`AuthGraphqlClientService customerUsernameChangeVerify should match snapshot: for operation 1`] = `
+"mutation customerUsernameChangeVerify($otp: OTP) {
+ customerUsernameChangeVerify(otp: $otp)
+}"
+`;
+
+exports[`AuthGraphqlClientService customerUsernameChangeVerify should match snapshot: for parameters 1`] = `
+Object {
+  "otp": Object {
+    "otp": "testOtp",
+    "session": "testSession",
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService getAccessTokenByRefreshToken should match snapshot: for operation 1`] = `
+"mutation getAccessTokenByRefreshToken($input: AccessTokenByRefreshTokenInputType!) {
+ getAccessTokenByRefreshToken(input: $input) {
+
+  tokens {
+   accessToken
+   refreshToken
+  }
+ }
+}"
+`;
+
+exports[`AuthGraphqlClientService getAccessTokenByRefreshToken should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "tokens": Object {
+      "accessToken": "testAccessToken",
+      "refreshToken": "testRefreshToken",
+    },
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService inAuthGetSigfiles should match snapshot: for operation 1`] = `
+"query inauthGetSigfiles($input: InAuthGetSigfilesRequestInput!) {
+ inauthGetSigfiles(input: $input)
+}"
+`;
+
+exports[`AuthGraphqlClientService inAuthGetSigfiles should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "deviceId": "testDeviceId",
+    "deviceType": "testDeviceType",
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService inAuthMobileDeviceRegister should match snapshot: for operation 1`] = `
+"mutation inauthDeviceRegister($input: InAuthDeviceRegistrationRequestInput!) {
+ inauthDeviceRegister(input: $input) {
+  deviceResponse
+ }
+}"
+`;
+
+exports[`AuthGraphqlClientService inAuthMobileDeviceRegister should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "deviceId": "testDeviceId",
+    "payload": "testInAuthPayload",
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService inAuthPayloadValidate should match snapshot: for operation 1`] = `
+"mutation inAuthPayloadValidate($input: InAuthPayloadInput!) {
+ inAuthPayloadValidate(input: $input) {
+  success
+ }
+}"
+`;
+
+exports[`AuthGraphqlClientService inAuthPayloadValidate should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "auth": Object {
+      "accessToken": "testAccessToken",
+      "expiresIn": 655321,
+      "sub": "testSub",
+    },
+    "deviceId": "testDeviceId",
+    "deviceIpAddress": "testIpAddress",
+    "inAuthLogPayload": "testInAuthPayload",
+    "transactionId": "testTransactionId",
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService inauthBlacklistedDeviceUnblockedStatusSet should match snapshot: for operation 1`] = `
+"mutation inauthBlacklistedDeviceUnblockedStatusSet($deviceId: ID!, $unblockedStatus: Boolean!) {
+ inauthBlacklistedDeviceUnblockedStatusSet(deviceId: $deviceId, unblockedStatus: $unblockedStatus)
+}"
+`;
+
+exports[`AuthGraphqlClientService inauthBlacklistedDeviceUnblockedStatusSet should match snapshot: for parameters 1`] = `
+Object {
+  "deviceId": "testDeviceId",
+  "unblockedStatus": false,
+}
+`;
+
+exports[`AuthGraphqlClientService inauthCustomerToDeviceConnect should match snapshot: for operation 1`] = `
+"mutation inauthCustomerToDeviceConnect($input: InauthCustomerToDeviceConnectInput!) {
+ inauthCustomerToDeviceConnect(input: $input)
+}"
+`;
+
+exports[`AuthGraphqlClientService inauthCustomerToDeviceConnect should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "customerId": 42,
+    "deviceId": "testDeviceId",
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService inauthDeviceBlacklistRemove should match snapshot: for operation 1`] = `
+"mutation inauthDeviceBlacklistRemove($deviceId: ID!) {
+ inauthDeviceBlacklistRemove(deviceId: $deviceId)
+}"
+`;
+
+exports[`AuthGraphqlClientService inauthDeviceBlacklistRemove should match snapshot: for parameters 1`] = `
+Object {
+  "deviceId": "testDeviceId",
+}
+`;
+
+exports[`AuthGraphqlClientService inauthDeviceTrustScoreThresholdUpdate should match snapshot: for operation 1`] = `
+"mutation inauthDeviceTrustScoreThresholdUpdate($input: InauthTrustScoreValueInput!) {
+ inauthDeviceTrustScoreThresholdUpdate(input: $input)
+}"
+`;
+
+exports[`AuthGraphqlClientService inauthDeviceTrustScoreThresholdUpdate should match snapshot: for parameters 1`] = `
+Object {
+  "input": Object {
+    "value": 42,
+  },
+}
+`;
+
+exports[`AuthGraphqlClientService logout should match snapshot: for operation 1`] = `
+"mutation logout($accessToken: String) {
+ logout(accessToken: $accessToken)
+}"
+`;
+
+exports[`AuthGraphqlClientService logout should match snapshot: for parameters 1`] = `
+Object {
+  "accessToken": "testAccessToken",
+}
+`;
+
+exports[`AuthGraphqlClientService updateUserAttrs should match snapshot: for operation 1`] = `
+"mutation updateUserAttrs($input: UserAttributes, $accessToken: String) {
+ updateUserAttrs(input: $input, accessToken: $accessToken)
+}"
+`;
+
+exports[`AuthGraphqlClientService updateUserAttrs should match snapshot: for parameters 1`] = `
+Object {
+  "accessToken": "testAccessToken",
+  "input": Object {
+    "name": Object {
+      "first": "testFirstName",
+    },
+  },
+}
+`;

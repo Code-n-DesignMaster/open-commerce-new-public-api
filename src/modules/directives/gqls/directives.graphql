@@ -1,0 +1,2 @@
+directive @inAuthPayloadValidate on ARGUMENT_DEFINITION
+directive @adminOnly on FIELD_DEFINITION

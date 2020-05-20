@@ -1,0 +1,26 @@
+image: node:10
+
+pipelines:
+  default:
+    - step:
+        name: build 
+        caches:
+          - node
+        script:
+          - cp .npmrc_config .npmrc
+          - npm install
+          - npm run lint
+          - npm run build
+          - npm run test:ci
+        artifacts:
+          - coverage/*
+          - test-reports/*
+    - step:
+        name: sonar analyze
+        script:
+          - cp .npmrc_config .npmrc
+          - apt-get update; apt-get install -y jq unzip
+          - curl --insecure -OL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip
+          - unzip sonar-scanner-cli-4.2.0.1873-linux.zip
+          - export SONAR_SCANNER_OPTS="-Xmx1024m"
+          - ./sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dproject.settings=sonar-project.properties -Dsonar.bitbucket.repoSlug=$BITBUCKET_REPO_SLUG -Dsonar.bitbucket.accountName=$BITBUCKET_REPO_OWNER -Dsonar.bitbucket.branchName=$BITBUCKET_BRANCH

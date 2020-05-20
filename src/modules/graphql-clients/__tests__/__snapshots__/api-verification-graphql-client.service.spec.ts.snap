@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ApiVerificationGraphqlClientService verifyAdminApiKey should match snapshot: for operation 1`] = `
+"query verifyAdminApiKey($apiKey: ID!) {
+ verifyAdminApiKey(apiKey: $apiKey)
+}"
+`;
+
+exports[`ApiVerificationGraphqlClientService verifyAdminApiKey should match snapshot: for parameters 1`] = `
+Object {
+  "apiKey": "testApiKey",
+}
+`;
+
+exports[`ApiVerificationGraphqlClientService verifyApiKey should match snapshot: for operation 1`] = `
+"query verifyApiKey($apiKey: ID!) {
+ verifyApiKey(apiKey: $apiKey)
+}"
+`;
+
+exports[`ApiVerificationGraphqlClientService verifyApiKey should match snapshot: for parameters 1`] = `
+Object {
+  "apiKey": "testApiKey",
+}
+`;

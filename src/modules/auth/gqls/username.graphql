@@ -1,0 +1,15 @@
+extend type Mutation {
+  customerUsernameChange(
+    newUsername: String,
+    sub: String,
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): String
+
+  customerUsernameChangeVerify(
+    otp: OTP,
+
+    # The log payload from InAuth
+    inAuthLog: String @inAuthPayloadValidate
+  ): String
+}
